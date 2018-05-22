@@ -1,0 +1,22 @@
+{
+  "name": "blockchain-ui",
+  "version": "1.0.0",
+  "description": "A client for openchain",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/igoodwill/GoedeBlockchain.git"
+  },
+  "author": "igoodwill",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "~1.8.2"
+  },
+  "dependencies": {
+    "mithril": "^1.1.6",
+    "skeleton-css": "^2.0.4"
+  }
+}
