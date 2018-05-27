@@ -5,7 +5,7 @@ module.exports = {
     	return m("div", [
     		m("br"),
             m("div", {class: "row"}, [
-                m("a", {href: "#!/wallet"}, "Back")
+                m("a", {href: "#!/user-data"}, "Back")
             ])
     	])
     }

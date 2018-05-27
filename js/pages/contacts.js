@@ -14,6 +14,8 @@ function getContacts() {
     return contacts;
 }
 
+const contacts = getContacts()
+
 module.exports = {
 	sendRequest: function() {
 		m.route.set("/send-request")
@@ -25,13 +27,13 @@ module.exports = {
             m("table", [
                 m("thead", [m("tr", [
                     m("th", "Name"),
-                    m("th", "Total Transactions"),
+                    m("th", "Total Transactions")
                 ])]),
               m("tbody", [
-                getContacts().map(function(contact) {
+                contacts.map(function(contact) {
                   return m("tr", [
                     m("td", contact.name),
-                    m("td", contact.totalTransactions),
+                    m("td", contact.totalTransactions)
                   ])
                 })
               ])

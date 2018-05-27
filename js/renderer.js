@@ -1,5 +1,10 @@
 const m = require('mithril')
 
+global.dataTypes = [ // Names of data types which are displayed to user.
+    "Name",
+    "Phone number"
+]
+
 const RegisterComponent = require('./pages/register.js')
 const LoginComponent = require('./pages/login.js')
 const ForgotPasswordComponent = require('./pages/forgot-password.js')
