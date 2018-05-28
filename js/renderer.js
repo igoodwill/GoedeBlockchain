@@ -1,4 +1,6 @@
 const m = require('mithril')
+global.filesystem = require('./partial/filesystem.js')
+global.chain = require('./partial/chain.js')
 
 global.dataTypes = [ // Names of data types which are displayed to user.
     "Name",

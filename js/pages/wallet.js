@@ -1,7 +1,8 @@
 const m = require('mithril')
 
 function getPublicKey() {
-	var publicKey = "YOUR_PUBLIC_KEY" // Call here a method that returns the user's public key.
+    global.chain.loadKeyFromSeed(global.filesystem.seed)
+	var publicKey = global.chain.address.toString() // Call here a method that returns the user's public key.
 
 	return publicKey;
 }
