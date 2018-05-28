@@ -11,47 +11,7 @@ var data = {
 }
 
 const dataTypes = global.dataTypes
-const fields = [ // Fields of data types which are displayed to user.
-    m("div", [
-        m("b", "First name"),
-        m("br"),
-        m("input", {
-            type: "text",
-            name: "first",
-            placeholder: "First name",
-            oninput: m.withAttr("value", function (val) {
-                data.setData(0, val)
-            }),
-            value: data.data[0]
-        }),
-        m("br"),
-        m("b", "Last name"),
-        m("br"),
-        m("input", {
-            type: "text",
-            name: "last",
-            placeholder: "Last name",
-            oninput: m.withAttr("value", function (val) {
-                data.setData(1, val)
-            }),
-            value: data.data[1]
-        })
-    ]),
-
-    m("div", [
-        m("b", "Phone number"),
-        m("br"),
-        m("input", {
-            type: "tel",
-            name: "number",
-            placeholder: "Phone number",
-            oninput: m.withAttr("value", function (val) {
-                data.setData(0, val)
-            }),
-            value: data.data[0]
-        })
-    ])
-]
+const fields = global.dataTypesFields
 
 module.exports = {
     selectedDataType: 0,
@@ -77,7 +37,7 @@ module.exports = {
     		m("h4", {class: "title"}, "Send Data"),
             m("div", {class: "row"}, [
                 m("div", {class: "six columns"}, [
-                    m("label", {for: "dataType"}, "Data Type"),
+                    m("label", {for: "dataType"}, "Data type"),
                     m("select", {
                         id: "dataType",
                         class: "u-full-width",
