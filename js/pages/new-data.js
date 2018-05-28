@@ -63,6 +63,7 @@ module.exports = {
                 	onclick: this.cancel.bind(this)},
                 	"Cancel")
             ]),
+            m("br"),
             m("div", {class: "row"}, [
                 m("a", {href: "#!/user-data"}, "Back")
             ])
