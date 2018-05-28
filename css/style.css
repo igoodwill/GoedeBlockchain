@@ -52,6 +52,17 @@ input[type="password"]:focus {
 	border: none;
 }
 
+input[type="checkbox"] {
+	outline: 2px solid #800080;
+	border: none !important;
+	margin-right: 10px;
+}
+
+input[type="checkbox"]:checked {
+	outline: 2px solid #800080;
+	border: none !important;
+}
+
 select {
 	color: #800080;
 	outline: 2px solid #800080;
@@ -124,4 +135,71 @@ label {
 table {
     border-collapse: collapse;
     width: 100%;
+}
+
+ul {
+	list-style: none;
+	border: 2px solid #800080;
+	width: 80%;
+	margin-left: 6%;
+	padding-top: 10px;
+	height:100px;
+	overflow-y:scroll;
+}
+
+li {
+	color: #800080;
+	border-bottom: 2px solid #800080;
+	width: 90%;
+	margin-left: 6%;
+	font-size: 13px;
+}
+
+li > label {
+	margin: 0;
+}
+
+::-webkit-scrollbar {
+	border-left: 2px solid #800080;
+  	-webkit-appearance: none;
+  	width: 15px;
+  	padding-top: 0;
+}
+
+::-webkit-scrollbar-thumb {
+	margin-top: 0;
+	padding-top: 0;
+  	border-radius: 4px;
+  	border: 2px solid transparent;
+  	border-right: none;
+  	background-color: rgba(128, 0, 128, 0.4);
+  	background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(128, 0, 128, 0.6);
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement{
+	display: block;
+	background-size: 70%;
+	background-image: url(scrollbar/arrow-up.png);
+	background-repeat: no-repeat;
+	background-position: 3px 5px, 0 0;
+}
+
+::-webkit-scrollbar-button:vertical:end:increment{
+	display: block;
+	background-size: 70%;
+	background-image: url(scrollbar/arrow-down.png);
+	background-repeat: no-repeat;
+	background-position: 3px 5px, 0 0;
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement:hover{
+	background-image: url(scrollbar/arrow-up-hover.png);
+}
+
+::-webkit-scrollbar-button:vertical:end:increment:hover{
+	background-image: url(scrollbar/arrow-down-hover.png);
 }

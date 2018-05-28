@@ -27,7 +27,7 @@ function search(dataTypeId, value) {
 	return allData.filter(function (val) {
 		return (dataTypeId === val.dataType) && (val.value.toLowerCase().indexOf(value.toLowerCase()) !== -1)
 	}).map(function (val) {
-		return dataType + ": " + val.value
+		return val.value
 	})
 }
 
