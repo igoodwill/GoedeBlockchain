@@ -13,6 +13,9 @@ git clone https://github.com/igoodwill/GoedeBlockchain.git
 cd GoedeBlockchain
 # Install dependencies
 npm install
+# Remove bitcore-lib duplicates
+rm -r node_modules/openchain/node_modules/bitcore-lib
+rm -r node_modules/bitcore-ecies/node_modules/bitcore-lib
 # Run the app
 npm start
 ```
