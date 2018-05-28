@@ -1,4 +1,5 @@
 const m = require('mithril')
+const filesystem = require('../partial/filesystem.js')
 
 const PASSWORD_PLACEHOLDER = "********"
 
@@ -16,7 +17,8 @@ module.exports = {
         this.password = pwd
     },
     login: function () {
-    	var message = "Ok" // Call here a method that authorizes the user.
+    	var message = filesystem.unlock(this.username, this.password)
+            // Call here a method that authorizes the user.
             // It should return "Ok", if the user is authorized or two factor auth is enabled (and username-password combination is correct).
         	// If any error occurred, return the message about this error (note that it will be shown to the user).
 

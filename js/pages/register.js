@@ -16,7 +16,7 @@ module.exports = {
         this.password = pwd
     },
     register: function () {
-        var message = "Ok" // Call here a method that registers and authorizes the user.
+        var message = filesystem.register(this.email, this.username, this.password) // Call here a method that registers and authorizes the user.
             // It should return "Ok", if the user is authorized.
         	// If any error occurred, return the message about this error (note that it will be shown to the user).
 
