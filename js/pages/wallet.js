@@ -28,36 +28,38 @@ module.exports = {
 	},
 	view: function () {
     	return m("div", [
-    		m("h4", {class: "title"}, "Welcome!"),
-    		m("br"),
-    		m("b", getPublicKey()),
-    		m("br"),
-            m("button", {
-            	class: "button-primary",
-            	onclick: this.userData.bind(this)
-            }, "Your data"),
-            m("br"),
-            m("button", {
-            	class: "button-primary",
-            	onclick: this.receivedData.bind(this)
-            }, "Received data"),
-            m("br"),
-            m("button", {
-            	class: "button-primary",
-            	onclick: this.sendData.bind(this)
-            }, "Send data"),
-            m("br"),
-            m("button", {
-            	class: "button-primary",
-            	onclick: this.contacts.bind(this)
-            }, "Contacts"),
-            m("br"),
-            m("button", {
-            	class: "button-primary",
-            	onclick: this.transactions.bind(this)
-            }, "Transactions"),
-            m("br"),
-            m("div", {class: "row"}, [
+            m("div", {class: "centered-text"}, [
+                m("h4", "Welcome!")
+            ]),
+            m("div", {class: "centered-text"}, [
+                m("label", getPublicKey())
+            ]),
+            m("div", {class: "centered-text"}, [
+                m("button", {
+                	onclick: this.userData.bind(this)
+                }, "Your data")
+            ]),
+            m("div", {class: "centered-text"}, [
+                m("button", {
+                	onclick: this.receivedData.bind(this)
+                }, "Received data")
+            ]),
+            m("div", {class: "centered-text"}, [
+                m("button", {
+                	onclick: this.sendData.bind(this)
+                }, "Send data")
+            ]),
+            m("div", {class: "centered-text"}, [
+                m("button", {
+                	onclick: this.contacts.bind(this)
+                }, "Contacts")
+            ]),
+            m("div", {class: "centered-text"}, [
+                m("button", {
+                	onclick: this.transactions.bind(this)
+                }, "Transactions")
+            ]),
+            m("div", {class: "back"}, [
                 m("a", {
                 	onclick: this.logout.bind(this),
                 	href: "#!/login"

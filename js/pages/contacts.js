@@ -23,8 +23,7 @@ module.exports = {
 	view: function () {
     	return m("div", [
     		m("h4", {class: "title"}, "Contacts"),
-
-            m("table", [
+            m("table", {style: "width: 75%;float:left;"}, [
                 m("thead", [m("tr", [
                     m("th", "Name"),
                     m("th", "Total Transactions")
@@ -38,13 +37,13 @@ module.exports = {
                 })
               ])
             ]),
-
             m("button", {
-            	class: "button-primary",
+                class: "small-btn",
+                style: "margin-left: 5px;float:right;",
             	onclick: this.sendRequest.bind(this)
             }, "Send Request"),
 			m("br"),
-            m("div", {class: "row"}, [
+            m("div", {class: "back"}, [
                 m("a", {href: "#!/wallet"}, "Back to wallet")
             ])
     	])

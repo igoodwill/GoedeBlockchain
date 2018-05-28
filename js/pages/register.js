@@ -30,50 +30,51 @@ module.exports = {
         m.route.set("/login")
     },
     view: function () {
-        return m("div", [
+        return m("div[class=\"center\"]", [
             m("h4", {class: "title"}, "Registration"),
             m("hr"),
-            m("b", "Email"),
-            m("br"),
-            m("input", {
-                type: "email",
-                name: "email",
-                placeholder: "Email",
-                oninput: m.withAttr("value", this.setEmail.bind(this)),
-                value: this.email
-            }),
-            m("br"),
-            m("b", "Username"),
-            m("br"),
-            m("input", {
-                type: "text",
-                name: "name",
-                placeholder: "Username",
-                oninput: m.withAttr("value", this.setUsername.bind(this)),
-                value: this.username
-            }),
-            m("br"),
-            m("b", "Password"),
-            m("br"),
-            m("input", {
-                type: "password",
-                name: "pwd",
-                placeholder: PASSWORD_PLACEHOLDER,
-                oninput: m.withAttr("value", this.setPassword.bind(this)),
-                value: this.password
-            }),
-            m("br"),
-            m("button", {
-            	class: "button-primary",
-            	onclick: this.register.bind(this)
-            }, "Register"),
+            m("label", "Email"),
+            m("div", {class: "row"}, [
+                m("input", {
+                    type: "email",
+                    name: "email",
+                    placeholder: "Email",
+                    oninput: m.withAttr("value", this.setEmail.bind(this)),
+                    value: this.email
+                })
+            ]),
+            m("label", "Username"),
+            m("div", {class: "row"}, [
+                m("input", {
+                    type: "text",
+                    name: "name",
+                    placeholder: "Username",
+                    oninput: m.withAttr("value", this.setUsername.bind(this)),
+                    value: this.username
+                })
+            ]),
+            m("label", "Password"),
+            m("div", {class: "row"}, [
+                m("input", {
+                    type: "password",
+                    name: "pwd",
+                    placeholder: PASSWORD_PLACEHOLDER,
+                    oninput: m.withAttr("value", this.setPassword.bind(this)),
+                    value: this.password
+                })
+            ]),
+            m("div", {class: "row"}, [
+                m("button", {
+                	onclick: this.register.bind(this)
+                }, "Register")
+            ]),
             m("hr"),
-            m("b", "Already registered?"),
-            m("br"),
-            m("button", {
-            	class: "button-primary",
-            	onclick: this.login.bind(this)
-            }, "Login")
+            m("label", "Already registered?"),
+                m("div", {class: "row"}, [
+                m("button", {
+                	onclick: this.login.bind(this)
+                }, "Login")
+            ])
         ])
     }
 }

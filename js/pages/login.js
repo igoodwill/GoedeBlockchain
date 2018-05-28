@@ -35,44 +35,44 @@ module.exports = {
         m.route.set("/register")
     },
     view: function () {
-        return m("div", [
+        return m("div[class=\"center\"]", [
             m("h4", {class: "title"}, "Login"),
             m("hr"),
-            m("b", "Username"),
-            m("br"),
-            m("input", {
-                type: "text",
-                name: "name",
-                placeholder: "E-mail / username",
-                oninput: m.withAttr("value", this.setUsername.bind(this)),
-                value: this.username
-            }),
-            m("br"),
-            m("b", "Password"),
-            m("br"),
-            m("input", {
-                type: "password",
-                name: "pwd",
-                placeholder: PASSWORD_PLACEHOLDER,
-                oninput: m.withAttr("value", this.setPassword.bind(this)),
-                value: this.password
-            }),
-            m("br"),
-            m("button", {
-            	class: "button-primary",
-            	onclick: this.login.bind(this)
-            }, "Login"),
-            m("br"),
+            m("label", "Username"),
+            m("div", {class: "row"}, [
+                m("input", {
+                    type: "text",
+                    name: "name",
+                    placeholder: "E-mail / username",
+                    oninput: m.withAttr("value", this.setUsername.bind(this)),
+                    value: this.username
+                })
+            ]),
+            m("label", "Password"),
+            m("div", {class: "row"}, [
+                m("input", {
+                    type: "password",
+                    name: "pwd",
+                    placeholder: PASSWORD_PLACEHOLDER,
+                    oninput: m.withAttr("value", this.setPassword.bind(this)),
+                    value: this.password
+                })
+            ]),
+            m("div", {class: "row"}, [
+                m("button", {
+                	onclick: this.login.bind(this)
+                }, "Login")
+            ]),
             m("div", {class: "row"}, [
                 m("a", {href: "#!/forgot-password"}, "Forgot your password?")
             ]),
             m("hr"),
-            m("b", "New user?"),
-            m("br"),
-            m("button", {
-            	class: "button-primary",
-            	onclick: this.register
-            }, "Register")
+            m("label", "New user?"),
+            m("div", {class: "row"}, [
+                m("button", {
+                	onclick: this.register
+                }, "Register")
+            ])
         ])
     }
 }

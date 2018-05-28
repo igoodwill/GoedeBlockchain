@@ -17,23 +17,23 @@ module.exports = {
         }
     },
 	view: function () {
-    	return m("div", [
+    	return m("div[class=\"center\"]", [
     		m("h4", {class: "title"}, "Password Request"),
-            m("hr"),
-            m("b", "Username"),
-            m("br"),
-            m("input", {
-                type: "number",
-                name: "code",
-                placeholder: "E-mail / username",
-                oninput: m.withAttr("value", this.setUsername.bind(this)),
-                value: this.username
-            }),
-            m("br"),
-            m("button", {
-                class: "button-primary",
-                onclick: this.requestPassword.bind(this)
-            }, "Request"),
+            m("label", "Username"),
+            m("div", {class: "row"}, [
+                m("input", {
+                    type: "text",
+                    name: "code",
+                    placeholder: "E-mail / username",
+                    oninput: m.withAttr("value", this.setUsername.bind(this)),
+                    value: this.username
+                })
+            ]),
+            m("div", {class: "row"}, [
+                m("button", {
+                    onclick: this.requestPassword.bind(this)
+                }, "Request")
+            ]),
             m("hr"),
             m("div", {class: "row"}, [
                 m("a", {href: "#!/login"}, "Back")

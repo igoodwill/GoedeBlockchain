@@ -24,7 +24,6 @@ module.exports = {
 	view: function () {
     	return m("div", [
     		m("h4", {class: "title"}, "Transactions"),
-
             m("table", [
                 m("thead", [m("tr", [
                     m("th", "Hash"),
@@ -45,8 +44,7 @@ module.exports = {
                 })
               ])
             ]),
-
-            m("div", {class: "row"}, [
+            m("div", {class: "back"}, [
                 m("a", {href: "#!/wallet"}, "Back to wallet")
             ])
     	])

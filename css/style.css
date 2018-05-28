@@ -1,0 +1,127 @@
+body {
+	color: #585858;
+}
+
+table, th, td, button, div .right, div .center {
+	border: 2px solid #800080;
+}
+
+hr {
+	height: 2px;
+	color: #800080;
+	background-color: #800080;
+	border: none;
+	width: 90%;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+a {
+	color: #800080;
+}
+
+a:hover {
+	color: #585858;
+}
+
+div .back {
+	position: fixed;
+  	right: 7%;
+   	top: 25px;
+}
+
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="password"] {
+	color: #585858;
+	outline: 2px solid #800080;
+	border: none !important;
+	width: 90%;
+}
+
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="password"]:focus {
+	outline: 2px solid #800080 !important;
+	border: none;
+}
+
+select {
+	color: #800080;
+	outline: 2px solid #800080;
+	border: none;
+}
+
+select:focus {
+	outline: 2px solid #800080;
+	border: none;
+}
+
+button {
+	color: #800080;
+	background-color: white;
+	width: 30%;
+	text-align: center;
+	padding: 0;
+}
+
+button:hover {
+	color: #585858;
+	border: 2px solid #585858;
+}
+
+.small-btn {
+	width: 20%;
+}
+
+::placeholder {
+  	color: #800080;
+}
+
+div .center {
+	margin: auto;
+	width: 60%;
+}
+
+div .left {
+	width: 26%;
+	float: left;
+}
+
+div .right {
+	width: 60%;
+	float: right;
+	padding-right: 10%;
+}
+
+div .row {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 6%;
+}
+
+h4 {
+	margin-left: 7%;
+	margin-top: 20px;
+}
+
+div .centered-text {
+	text-align: center;
+}
+
+label {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 7%;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}

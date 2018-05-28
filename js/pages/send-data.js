@@ -32,44 +32,46 @@ module.exports = {
 
         m.route.set("/wallet")
     },
+    cancel: function() {
+        m.route.set("/wallet")
+    },
     view: function () {
         return m("div", [
-    		m("h4", {class: "title"}, "Send Data"),
-            m("div", {class: "row"}, [
-                m("div", {class: "six columns"}, [
-                    m("label", {for: "dataType"}, "Data type"),
-                    m("select", {
-                        id: "dataType",
-                        class: "u-full-width",
-                        onchange: m.withAttr("selectedIndex", this.setDataType.bind(this)),
-                    }, dataTypes.map(function(val, id) {
-                        return m(id === this.selectedDataType ? "option[selected]" : "option", {
-                            value: id
-                        }, val)
-                    }))
+    		m("div", {class: "centered-text"}, [
+                m("h4", "Send data")
+            ]),
+            m("div", {class: "left"}, [
+                m("select", {
+                    id: "dataType",
+                    class: "u-full-width",
+                    onchange: m.withAttr("selectedIndex", this.setDataType.bind(this)),
+                }, dataTypes.map(function(val, id) {
+                    return m(id === this.selectedDataType ? "option[selected]" : "option", {
+                        value: id
+                    }, val)
+                }))
+            ]),
+            m("div", {class: "right"}, [
+                fields[this.selectedDataType],
+                m("label", "Send to:"),
+                m("div", {class: "row"}, [
+                    m("input", {
+                        type: "text",
+                        name: "number",
+                        placeholder: "Send to",
+                        name: "receiverAddress",
+                        oninput: m.withAttr("value", this.setReceiverAddress.bind(this)),
+                    })
+                ]),
+                m("div", {class: "row"}, [
+                    m("button", {
+                        style: "margin-right: 10px;",
+                        onclick: this.sendData.bind(this)
+                    }, "Send"),
+                    m("button", {
+                        onclick: this.cancel.bind(this)
+                    }, "Cancel")
                 ])
-            ]),
-            m("br"),
-    		fields[this.selectedDataType],
-            m("br"),
-            m("div", {class: "row"}, [
-                m("input", {
-                    class: "six columns",
-                    type: "email",
-                    placeholder: "Send to",
-                    name: "receiverAddress",
-                    oninput: m.withAttr("value", this.setReceiverAddress.bind(this)),
-                    value: this.receiverAddress
-                })
-            ]),
-            m("div", {class: "row"}, [
-                m("button", {
-                	class: "button-primary",
-                	onclick: this.sendData.bind(this)},
-                	"Send")
-            ]),
-            m("div", {class: "row"}, [
-                m("a", {href: "#!/wallet"}, "Back to wallet")
             ])
     	])
     }

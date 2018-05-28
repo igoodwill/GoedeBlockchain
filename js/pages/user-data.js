@@ -59,12 +59,16 @@ module.exports = {
                     name: "search",
                     oninput: m.withAttr("value", this.setSearchFor.bind(this)),
                     value: this.searchFor
-                })
+                }),
+                m("button", {
+                    class: "small-btn",
+                    style: "margin-left: 130px;",
+                    onclick: this.search.bind(this)
+                }, "Search")
             ]),
             // TODO Attestation
             m("div", {class: "row"}, [
                 m("div", {class: "six columns"}, [
-                    m("label", {for: "dataType"}, "Data type"),
                     m("select", {
                         id: "dataType",
                         class: "u-full-width",
@@ -76,13 +80,6 @@ module.exports = {
                     }))
                 ])
             ]),
-            m("div", {class: "row"}, [
-                m("button", {
-                	class: "button-primary",
-                	onclick: this.search.bind(this)},
-                	"Search")
-            ]),
-            m("br"),
 			m("ul", [
                 this.dataToShow.map(function(val) {
                     return m("li", val)
@@ -90,11 +87,11 @@ module.exports = {
             ]),
 			m("div", {class: "row"}, [
                 m("button", {
-                	class: "button-primary",
-                	onclick: this.newData.bind(this)},
-                	"New data")
+                    class: "small-btn",
+                	onclick: this.newData.bind(this)
+                }, "New data")
             ]),
-            m("div", {class: "row"}, [
+            m("div", {class: "back"}, [
                 m("a", {href: "#!/wallet"}, "Back to wallet")
             ])
     	])

@@ -9,40 +9,42 @@ global.dataTypes = [ // Names of data types which are displayed to user.
 
 global.dataTypesFields = [ // Fields of data types which are displayed to user.
     m("div", [
-        m("b", "First name"),
-        m("br"),
-        m("input", {
-            type: "text",
-            name: "first",
-            placeholder: "First name",
-            oninput: m.withAttr("value", function (val) {
-                data.setData(0, val)
+        m("label", "First name"),
+        m("div", {class: "row"}, [
+            m("input", {
+                type: "text",
+                name: "first",
+                placeholder: "First name",
+                oninput: m.withAttr("value", function (val) {
+                    data.setData(0, val)
+                })
             })
-        }),
-        m("br"),
-        m("b", "Last name"),
-        m("br"),
-        m("input", {
-            type: "text",
-            name: "last",
-            placeholder: "Last name",
-            oninput: m.withAttr("value", function (val) {
-                data.setData(1, val)
+        ]),
+        m("label", "Last name"),
+        m("div", {class: "row"}, [
+            m("input", {
+                type: "text",
+                name: "last",
+                placeholder: "Last name",
+                oninput: m.withAttr("value", function (val) {
+                    data.setData(1, val)
+                })
             })
-        })
+        ])
     ]),
 
     m("div", [
-        m("b", "Phone number"),
-        m("br"),
-        m("input", {
-            type: "tel",
-            name: "number",
-            placeholder: "Phone number",
-            oninput: m.withAttr("value", function (val) {
-                data.setData(0, val)
+        m("label", "Phone number"),
+        m("div", {class: "row"}, [
+            m("input", {
+                type: "tel",
+                name: "number",
+                placeholder: "Phone number",
+                oninput: m.withAttr("value", function (val) {
+                    data.setData(0, val)
+                })
             })
-        })
+        ])
     ])
 ]
 
