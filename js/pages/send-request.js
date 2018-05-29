@@ -39,13 +39,17 @@ module.exports = {
                 m("ul", [
                     contactsNames.map(function(contactName, id) {
                         return m("li", [
-                            m("label", {for: id}, [
+                            m("label", {
+                                class: "custom-checkbox",
+                                for: id
+                            }, [
                                 m("input", {
                                     type: "checkbox",
-                                    style: "float: right;",
+                                    //style: "float: right;",
                                     id: id,
                                     name: "contact"
-                                })
+                                }),
+                                m("span", {class: "custom-checkmark"})
                             ], contactName)
                         ])
                     })

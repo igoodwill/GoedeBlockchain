@@ -4,14 +4,67 @@ function getAllData() {
     var data = [
         {
             dataType: 0,
-            value: "NAME 1"
+            value: "Name 1"
         },
         {
             dataType: 0,
-            value: "SeCond NAME"
-        }, {
+            value: "Name 2"
+        },
+        {
+            dataType: 0,
+            value: "Name 3"
+        },
+        {
+            dataType: 0,
+            value: "Name 4"
+        },
+        {
+            dataType: 0,
+            value: "Name 5"
+        },
+        {
+            dataType: 0,
+            value: "Name 6"
+        },
+        {
+            dataType: 0,
+            value: "Name 7"
+        },
+        {
+            dataType: 0,
+            value: "Name 8"
+        },
+        {
             dataType: 1,
             value: "234523452"
+        },
+        {
+            dataType: 1,
+            value: "876781231"
+        },
+        {
+            dataType: 1,
+            value: "567624567"
+        },
+        {
+            dataType: 1,
+            value: "123871349"
+        },
+        {
+            dataType: 1,
+            value: "195173490"
+        },
+        {
+            dataType: 1,
+            value: "194759013"
+        },
+        {
+            dataType: 1,
+            value: "629305589"
+        },
+        {
+            dataType: 1,
+            value: "105882494"
         }
     ] // Call here a method that returns an array of data objects. A data object must have fields: dataType, value!
 
