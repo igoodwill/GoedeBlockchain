@@ -22,7 +22,6 @@ module.exports = {
 
         this.selectedDataType = id
         data.clearData()
-        m.redraw()
     },
     setReceiverAddress: function (address) {
         this.receiverAddress = address

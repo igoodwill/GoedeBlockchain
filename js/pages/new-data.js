@@ -21,7 +21,6 @@ module.exports = {
 
         this.selectedDataType = id
         data.clearData()
-        m.redraw()
     },
     saveData: function () {
         // Call here a method that saves the data.

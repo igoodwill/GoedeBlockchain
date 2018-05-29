@@ -8,6 +8,35 @@ function getContactsNames() {
     return contactsNames;
 }
 
+const fieldsToRequest = [ // Fields of data types which are displayed to user.
+    m("div", [
+        m("label", {class: "custom-checkbox"}, [
+            m("input", {
+                type: "checkbox",
+                style: "float: left;"
+            }),
+            m("span", {class: "custom-checkmark"})
+        ], "First name"),
+        m("label", {class: "custom-checkbox"}, [
+            m("input", {
+                type: "checkbox",
+                style: "float: left;"
+            }),
+            m("span", {class: "custom-checkmark"})
+        ], "Second name")
+    ]),
+
+    m("div", [
+        m("label", {class: "custom-checkbox"}, [
+            m("input", {
+                type: "checkbox",
+                style: "float: left;"
+            }),
+            m("span", {class: "custom-checkmark"})
+        ], "Phone number"),
+    ])
+]
+
 const dataTypes = global.dataTypes
 const contactsNames = getContactsNames()
 
@@ -45,7 +74,6 @@ module.exports = {
                             }, [
                                 m("input", {
                                     type: "checkbox",
-                                    //style: "float: right;",
                                     id: id,
                                     name: "contact"
                                 }),
@@ -68,6 +96,7 @@ module.exports = {
                         }))
                     ])
                 ]),
+                fieldsToRequest[this.selectedDataType],
                 m("div", {class: "row"}, [
                     m("button", {
                         style: "margin-right: 10px;",

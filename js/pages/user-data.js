@@ -96,7 +96,6 @@ module.exports = {
 	},
 	search: function () {
     	this.dataToShow = search(this.selectedDataType, this.searchFor)
-    	m.redraw()
     },
     newData: function () {
         m.route.set("/new-data")
