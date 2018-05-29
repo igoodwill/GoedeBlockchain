@@ -48,6 +48,10 @@ global.dataTypesFields = [ // Fields of data types which are displayed to user.
     ])
 ]
 
+global.emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+global.usernameRegex = /^[a-z](?:[a-z\d]|-(?=[a-z\d])){2,38}$/
+global.passwordRegex = /^[a-zA-Z]\w{3,29}$/
+
 const RegisterComponent = require('./pages/register.js')
 const LoginComponent = require('./pages/login.js')
 const ForgotPasswordComponent = require('./pages/forgot-password.js')

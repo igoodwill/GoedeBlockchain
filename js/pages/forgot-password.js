@@ -6,6 +6,16 @@ module.exports = {
         this.username = name
     },
     requestPassword: function () {
+        if (!this.username) {
+            alert("Input e-mail / username, please!")
+            return
+        }
+
+        if (!(global.emailRegex.test(this.username) || global.usernameRegex.test(this.username))) {
+            alert("Wrong e-mail / username format!")
+            return
+        }
+
     	var message = "Ok" // Call here a method that requests the password.
             // It should return "Ok", if the password is requested.
         	// If any error occurred, return the message about this error (note that it will be shown to the user).

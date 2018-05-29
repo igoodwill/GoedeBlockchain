@@ -17,6 +17,26 @@ module.exports = {
         this.password = pwd
     },
     login: function () {
+        if (!this.username) {
+            alert("Input e-mail / username, please!")
+            return
+        }
+
+        if (!(global.emailRegex.test(this.username) || global.usernameRegex.test(this.username))) {
+            alert("Wrong e-mail / username format!")
+            return
+        }
+
+        if (!this.password) {
+            alert("Input password, please!")
+            return
+        }
+
+        if (!global.passwordRegex.test(this.password)) {
+            alert("Wrong password format!")
+            return
+        }
+
     	var message = filesystem.unlock(this.username, this.password)
             // Call here a method that authorizes the user.
             // It should return "Ok", if the user is authorized or two factor auth is enabled (and username-password combination is correct).

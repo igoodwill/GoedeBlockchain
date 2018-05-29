@@ -16,6 +16,36 @@ module.exports = {
         this.password = pwd
     },
     register: function () {
+        if (!this.email) {
+            alert("Input e-mail, please!")
+            return
+        }
+
+        if (!global.emailRegex.test(this.email)) {
+            alert("Wrong e-mail format!")
+            return
+        }
+
+        if (!this.username) {
+            alert("Input username, please!")
+            return
+        }
+
+        if (!global.usernameRegex.test(this.username)) {
+            alert("Wrong e-mail format!")
+            return
+        }
+
+        if (!this.password) {
+            alert("Input password, please!")
+            return
+        }
+
+        if (!global.passwordRegex.test(this.password)) {
+            alert("Wrong password format!")
+            return
+        }
+
         var message = filesystem.register(this.email, this.username, this.password) // Call here a method that registers and authorizes the user.
             // It should return "Ok", if the user is authorized.
         	// If any error occurred, return the message about this error (note that it will be shown to the user).

@@ -6,6 +6,16 @@ module.exports = {
         this.code = code
     },
     login: function () {
+        if (!this.code) {
+            alert("Input code, please!")
+            return
+        }
+
+        if (!/^\d{6}$/.test(this.code)) {
+            alert("Wrong code format!")
+            return
+        }
+
     	var message = "Ok" // Call here a method that authorizes the user.
             // It should return "Ok", if the user is authorized.
         	// If any error occurred, return the message about this error (note that it will be shown to the user).
@@ -23,7 +33,7 @@ module.exports = {
             m("label", "Enter the code below"),
             m("div", {class: "row"}, [
                 m("input", {
-                    type: "number",
+                    type: "text",
                     name: "code",
                     placeholder: "Code",
                     oninput: m.withAttr("value", this.setCode.bind(this)),
