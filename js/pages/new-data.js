@@ -77,6 +77,14 @@ module.exports = {
             return
         }
 
+        var nodeList = document.getElementsByName('dataTypeField')
+
+        for (var i = 0; i < nodeList.length; i++)
+            if (!nodeList[i].value) {
+                alert("Input all data fields, please!")
+                return
+            }
+
         var stringData = ""
 
         for (var i = 0; i < data.data.length; i++)
