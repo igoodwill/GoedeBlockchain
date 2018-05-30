@@ -43,7 +43,6 @@ module.exports = {
 	},
 	search: function () {
     	this.dataToShow = search(this.selectedDataType, this.searchFor)
-    	m.redraw()
     },
 	view: function () {
     	return m("div", [

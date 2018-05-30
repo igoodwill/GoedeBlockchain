@@ -11,7 +11,46 @@ var data = {
 }
 
 const dataTypes = global.dataTypes
-const fields = global.dataTypesFields
+const fields = [ // Fields of data types which are displayed to user.
+    m("div", [
+        m("label", "First name"),
+        m("div", {class: "row"}, [
+            m("input", {
+                type: "text",
+                name: "dataTypeField",
+                placeholder: "First name",
+                oninput: m.withAttr("value", function (val) {
+                    data.setData(0, val)
+                })
+            })
+        ]),
+        m("label", "Last name"),
+        m("div", {class: "row"}, [
+            m("input", {
+                type: "text",
+                name: "dataTypeField",
+                placeholder: "Last name",
+                oninput: m.withAttr("value", function (val) {
+                    data.setData(1, val)
+                })
+            })
+        ])
+    ]),
+
+    m("div", [
+        m("label", "Phone number"),
+        m("div", {class: "row"}, [
+            m("input", {
+                type: "tel",
+                name: "dataTypeField",
+                placeholder: "Phone number",
+                oninput: m.withAttr("value", function (val) {
+                    data.setData(0, val)
+                })
+            })
+        ])
+    ])
+]
 
 module.exports = {
     selectedDataType: 0,
@@ -21,6 +60,12 @@ module.exports = {
             return
 
         this.selectedDataType = id
+
+        var nodeList = document.getElementsByName('dataTypeField')
+
+        for (var i = 0; i < nodeList.length; i++)
+            nodeList[i].value = ""
+        
         data.clearData()
     },
     setReceiverAddress: function (address) {

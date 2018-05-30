@@ -7,47 +7,6 @@ global.dataTypes = [ // Names of data types which are displayed to user.
     "Phone number"
 ]
 
-global.dataTypesFields = [ // Fields of data types which are displayed to user.
-    m("div", [
-        m("label", "First name"),
-        m("div", {class: "row"}, [
-            m("input", {
-                type: "text",
-                name: "first",
-                placeholder: "First name",
-                oninput: m.withAttr("value", function (val) {
-                    data.setData(0, val)
-                })
-            })
-        ]),
-        m("label", "Last name"),
-        m("div", {class: "row"}, [
-            m("input", {
-                type: "text",
-                name: "last",
-                placeholder: "Last name",
-                oninput: m.withAttr("value", function (val) {
-                    data.setData(1, val)
-                })
-            })
-        ])
-    ]),
-
-    m("div", [
-        m("label", "Phone number"),
-        m("div", {class: "row"}, [
-            m("input", {
-                type: "tel",
-                name: "number",
-                placeholder: "Phone number",
-                oninput: m.withAttr("value", function (val) {
-                    data.setData(0, val)
-                })
-            })
-        ])
-    ])
-]
-
 global.emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 global.usernameRegex = /^[a-z](?:[a-z\d]|-(?=[a-z\d])){2,38}$/
 global.passwordRegex = /^[a-zA-Z]\w{3,29}$/

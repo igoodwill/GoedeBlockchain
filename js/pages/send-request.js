@@ -13,6 +13,7 @@ const fieldsToRequest = [ // Fields of data types which are displayed to user.
         m("label", {class: "custom-checkbox"}, [
             m("input", {
                 type: "checkbox",
+                name: "fieldToRequest",
                 style: "float: left;"
             }),
             m("span", {class: "custom-checkmark"})
@@ -20,6 +21,7 @@ const fieldsToRequest = [ // Fields of data types which are displayed to user.
         m("label", {class: "custom-checkbox"}, [
             m("input", {
                 type: "checkbox",
+                name: "fieldToRequest",
                 style: "float: left;"
             }),
             m("span", {class: "custom-checkmark"})
@@ -30,10 +32,11 @@ const fieldsToRequest = [ // Fields of data types which are displayed to user.
         m("label", {class: "custom-checkbox"}, [
             m("input", {
                 type: "checkbox",
+                name: "fieldToRequest",
                 style: "float: left;"
             }),
             m("span", {class: "custom-checkmark"})
-        ], "Phone number"),
+        ], "Phone number")
     ])
 ]
 
@@ -43,7 +46,15 @@ const contactsNames = getContactsNames()
 module.exports = {
     selectedDataType: 0,
     setDataType: function (id) {
+        if (id === this.selectedDataType)
+            return
+
         this.selectedDataType = id
+
+        var nodeList = document.getElementsByName('fieldToRequest')
+
+        for (var i = 0; i < nodeList.length; i++)
+            nodeList[i].checked = false
     },
     sendRequest: function() {
         var checkedContacts = []
@@ -52,7 +63,13 @@ module.exports = {
         for (var i = 0; i < nodeList.length; i++)
             checkedContacts[i] = nodeList[i].checked
 
-        alert(checkedContacts + "\n" + this.selectedDataType)// Call here a method that sends the request.
+        var checkedFields = []
+        nodeList = document.getElementsByName('fieldToRequest')
+
+        for (var i = 0; i < nodeList.length; i++)
+            checkedFields[i] = nodeList[i].checked
+
+        alert(checkedContacts + "\n" + checkedFields + "\n" + this.selectedDataType)// Call here a method that sends the request.
 
         m.route.set("/contacts")
     },
