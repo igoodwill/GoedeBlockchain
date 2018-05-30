@@ -1,86 +1,14 @@
 const m = require('mithril')
 
-function getAllData() {
-    var data = [
-        {
-            dataType: 0,
-            value: "Name 1"
-        },
-        {
-            dataType: 0,
-            value: "Name 2"
-        },
-        {
-            dataType: 0,
-            value: "Name 3"
-        },
-        {
-            dataType: 0,
-            value: "Name 4"
-        },
-        {
-            dataType: 0,
-            value: "Name 5"
-        },
-        {
-            dataType: 0,
-            value: "Name 6"
-        },
-        {
-            dataType: 0,
-            value: "Name 7"
-        },
-        {
-            dataType: 0,
-            value: "Name 8"
-        },
-        {
-            dataType: 1,
-            value: "234523452"
-        },
-        {
-            dataType: 1,
-            value: "876781231"
-        },
-        {
-            dataType: 1,
-            value: "567624567"
-        },
-        {
-            dataType: 1,
-            value: "123871349"
-        },
-        {
-            dataType: 1,
-            value: "195173490"
-        },
-        {
-            dataType: 1,
-            value: "194759013"
-        },
-        {
-            dataType: 1,
-            value: "629305589"
-        },
-        {
-            dataType: 1,
-            value: "105882494"
-        }
-    ] // Call here a method that returns an array of data objects. A data object must have fields: dataType, value!
-
-    return data;
-}
-
-const allData = getAllData()
 const dataTypes = global.dataTypes
 
 function search(dataTypeId, value) {
-	var dataType = dataTypes[dataTypeId]
+    var allData = global.filesystem.data.userData
 
 	return allData.filter(function (val) {
-		return (dataTypeId === val.dataType) && (val.value.toLowerCase().indexOf(value.toLowerCase()) !== -1)
+		return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
 	}).map(function (val) {
-		return dataType + ": " + val.value
+		return val.dataName
 	})
 }
 

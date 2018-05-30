@@ -1,4 +1,5 @@
 const m = require('mithril')
+const p2p = require('../partial/p2p.js')
 
 const PASSWORD_PLACEHOLDER = "********"
 
@@ -51,6 +52,10 @@ module.exports = {
         	// If any error occurred, return the message about this error (note that it will be shown to the user).
 
         if (message.toLowerCase() === "ok") {
+            global.chain.loadKeyFromSeed(global.filesystem.seed)
+            global.peer = p2p.createPeer(global.chain.address);
+            global.peer.on('connection', p2p.getData);
+
             m.route.set("/wallet")
         } else {
             alert(message)

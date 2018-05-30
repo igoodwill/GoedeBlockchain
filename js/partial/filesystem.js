@@ -13,7 +13,9 @@ var filesystem = {
 
     defaultData:  {
         name: "",
-        email: ""
+        email: "",
+        userData: [],
+        receivedData: []
     },
 
     seed: "",
@@ -77,6 +79,7 @@ var filesystem = {
             if(this.data.email != email && this.data.name != email) {
                 return "Wrong credentials provided"
             }
+
             return "ok"
         } else {
             return "Could not decrypt user data"

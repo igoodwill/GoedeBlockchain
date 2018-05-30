@@ -1,7 +1,7 @@
 var p2p = {
     createPeer: function (id) {
         peer = new global.Peer(id, {
-            host: 'localhost',
+            host: 'bozhko.net',
             port: '9000'
         })
         return peer
@@ -17,7 +17,8 @@ var p2p = {
     },
     getData: function (connection) {
         connection.on('data', function (data) {
-            global.filesystem.data = data
+            global.filesystem.data.receivedData[global.filesystem.data.receivedData.length] = data
+            global.filesystem.writeData()
         });
     }
 }
