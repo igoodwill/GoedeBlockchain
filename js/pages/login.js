@@ -1,5 +1,6 @@
 const m = require('mithril')
 const filesystem = require('../partial/filesystem.js')
+const p2p = require('../partial/p2p.js')
 
 const PASSWORD_PLACEHOLDER = "********"
 
@@ -45,8 +46,13 @@ module.exports = {
         if (message.toLowerCase() === "ok") {
             if (global.filesystem.otp.enabled)
                 m.route.set("/two-factor")
-            else
+            else {
+                global.chain.loadKeyFromSeed(global.filesystem.seed)
+                global.peer = p2p.createPeer(global.chain.address);
+                global.peer.on('connection', p2p.getData);
+
                 m.route.set("/wallet")
+            }
         } else {
             alert(message)
         }

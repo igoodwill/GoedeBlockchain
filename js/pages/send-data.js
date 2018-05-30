@@ -1,4 +1,5 @@
 const m = require('mithril')
+const p2p = require('../partial/p2p.js')
 
 var data = {
     data: [],
@@ -54,6 +55,7 @@ const fields = [ // Fields of data types which are displayed to user.
 
 module.exports = {
     selectedDataType: 0,
+    dataName: "",
     receiverAddress: "",
     setDataType: function (id) {
         if (id === this.selectedDataType)
@@ -68,11 +70,41 @@ module.exports = {
 
         data.clearData()
     },
+    setDataName: function (name) {
+        this.dataName = name
+    },
     setReceiverAddress: function (address) {
         this.receiverAddress = address
     },
     sendData: function () {
-        // TODO Send
+        if (!this.dataName) {
+            alert("Input data name, please!")
+            return
+        }
+
+        var nodeList = document.getElementsByName('dataTypeField')
+
+        for (var i = 0; i < nodeList.length; i++)
+            if (!nodeList[i].value) {
+                alert("Input all data fields, please!")
+                return
+            }
+
+        if (!this.receiverAddress) {
+            alert("Input receiver's public key, please!")
+            return
+        }
+
+        var stringData = ""
+
+        for (var i = 0; i < data.data.length; i++)
+            stringData += global.dataTypesFieldsNames[this.selectedDataType][i] + ": " + data.data[i] + "\n"
+
+        p2p.sendData(global.peer, this.receiverAddress, {
+            dataName: this.dataName,
+            dataType: this.selectedDataType,
+            data: stringData.trim()
+        })
 
         m.route.set("/wallet")
     },
@@ -96,15 +128,24 @@ module.exports = {
                 }))
             ]),
             m("div", {class: "right"}, [
+                m("label", "Data name"),
+                m("div", {class: "row"}, [
+                    m("input", {
+                        type: "text",
+                        name: "dataName",
+                        placeholder: "Data name",
+                        oninput: m.withAttr("value", this.setDataName.bind(this))
+                    })
+                ]),
                 fields[this.selectedDataType],
                 m("label", "Send to:"),
                 m("div", {class: "row"}, [
                     m("input", {
                         type: "text",
                         name: "receiver",
-                        placeholder: "Send to",
+                        placeholder: "Receiver's public key",
                         name: "receiverAddress",
-                        oninput: m.withAttr("value", this.setReceiverAddress.bind(this)),
+                        oninput: m.withAttr("value", this.setReceiverAddress.bind(this))
                     })
                 ]),
                 m("div", {class: "row"}, [

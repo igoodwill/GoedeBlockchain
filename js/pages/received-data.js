@@ -1,34 +1,13 @@
 const m = require('mithril')
 
-function getAllData() {
-    var data = [
-        {
-            dataType: 0,
-            value: "NAME 1"
-        },
-        {
-            dataType: 0,
-            value: "SeCond NAME"
-        }, {
-            dataType: 1,
-            value: "234523452"
-        }
-    ] // Call here a method that returns an array of data objects. A data object must have fields: dataType, value!
-
-    return data;
-}
-
-const allData = getAllData()
 const dataTypes = global.dataTypes
 
 function search(dataTypeId, value) {
-	var dataType = dataTypes[dataTypeId]
+	var allData = global.filesystem.data.receivedData
 
-	return allData.filter(function (val) {
-		return (dataTypeId === val.dataType) && (val.value.toLowerCase().indexOf(value.toLowerCase()) !== -1)
-	}).map(function (val) {
-		return val.value
-	})
+    return allData.filter(function (val) {
+        return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
+    })
 }
 
 module.exports = {
@@ -78,7 +57,7 @@ module.exports = {
             ]),
 			m("ul", [
                 this.dataToShow.map(function(val) {
-                    return m("li", val)
+                    return m("li", val.dataName)
                 })
             ]),
             m("div", {class: "back"}, [

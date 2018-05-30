@@ -54,6 +54,7 @@ const fields = [ // Fields of data types which are displayed to user.
 
 module.exports = {
 	selectedDataType: 0,
+    dataName: "",
 	setDataType: function (id) {
         if (id === this.selectedDataType)
             return
@@ -67,8 +68,35 @@ module.exports = {
         
         data.clearData()
     },
+    setDataName: function (name) {
+        this.dataName = name
+    },
     saveData: function () {
-        // Call here a method that saves the data.
+        if (!this.dataName) {
+            alert("Input data name, please!")
+            return
+        }
+
+        var nodeList = document.getElementsByName('dataTypeField')
+
+        for (var i = 0; i < nodeList.length; i++)
+            if (!nodeList[i].value) {
+                alert("Input all data fields, please!")
+                return
+            }
+
+        var stringData = ""
+
+        for (var i = 0; i < data.data.length; i++)
+            stringData += global.dataTypesFieldsNames[this.selectedDataType][i] + ": " + data.data[i] + "\n"
+
+        global.filesystem.data.userData[global.filesystem.data.userData.length] = {
+            dataName: this.dataName,
+            dataType: this.selectedDataType,
+            data: stringData.trim()
+        }
+
+        global.filesystem.writeData()
 
         m.route.set("/user-data")
     },
@@ -92,6 +120,15 @@ module.exports = {
                 }))
             ]),
             m("div", {class: "right"}, [
+                m("label", "Data name"),
+                m("div", {class: "row"}, [
+                    m("input", {
+                        type: "text",
+                        name: "dataName",
+                        placeholder: "Data name",
+                        oninput: m.withAttr("value", this.setDataName.bind(this))
+                    })
+                ]),
                 fields[this.selectedDataType],
                 m("div", {class: "row"}, [
                     m("button", {

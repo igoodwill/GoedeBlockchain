@@ -7,6 +7,11 @@ global.dataTypes = [ // Names of data types which are displayed to user.
     "Phone number"
 ]
 
+global.dataTypesFieldsNames = [ // Names of data types' fields which are displayed to user.
+    ["First name", "Second name"],
+    ["Phone number"]
+]
+
 global.emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 global.usernameRegex = /^[a-z](?:[a-z\d]|-(?=[a-z\d])){2,38}$/
 global.passwordRegex = /^[\w\.\,\-\*]{3,29}$/

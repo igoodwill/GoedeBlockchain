@@ -15,7 +15,9 @@ var filesystem = {
 
     defaultData:  {
         name: "",
-        email: ""
+        email: "",
+        userData: [],
+        receivedData: []
     },
 
     seed: "",
