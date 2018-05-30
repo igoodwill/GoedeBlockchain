@@ -2,10 +2,6 @@ const fs = require('fs')
 const bitcore = require("bitcore-lib")
 const ECIES = require("bitcore-ecies")
 const Mnemonic = require("bitcore-mnemonic")
-const PropertiesReader = require('properties-reader');
-
-// Loading properties file
-var properties = PropertiesReader('properties.txt');
 
 var filesystem = {
     data: undefined,
@@ -24,7 +20,7 @@ var filesystem = {
 
     //Checks the availability of all the files required
     filesExist: function() {
-        return fs.existsSync(properties.path().data.file)
+        return fs.existsSync('data.txt')
     },
 
     //Loads and decrypts user data using mnemonic
@@ -37,7 +33,7 @@ var filesystem = {
         var bn = bitcore.crypto.BN.fromBuffer(hash)
         var key = new bitcore.PrivateKey(bn)
 
-        var buf = Buffer.from(fs.readFileSync(properties.path().data.file).toString(), 'hex')
+        var buf = Buffer.from(fs.readFileSync('data.txt').toString(), 'hex')
         var decryptor = ECIES().privateKey(key)
 
         try {
@@ -69,7 +65,7 @@ var filesystem = {
 
         var encryptor = ECIES().privateKey(key).publicKey(key.publicKey)
         var buf = encryptor.encrypt(JSON.stringify(this.data));
-        fs.writeFileSync(properties.path().data.file, buf.toString('hex'))
+        fs.writeFileSync('data.txt', buf.toString('hex'))
     },
 
     //Tries to load user data using password
@@ -95,7 +91,7 @@ var filesystem = {
 
         var encryptor = ECIES().privateKey(key).publicKey(key.publicKey)
         var buf = encryptor.encrypt(email);
-        fs.writeFileSync(properties.path().email.file, buf.toString('hex'))
+        fs.writeFileSync('mail.txt', buf.toString('hex'))
     },
 
     decryptEmail: function(username) {
@@ -104,7 +100,7 @@ var filesystem = {
         var bn = bitcore.crypto.BN.fromBuffer(hash)
         var key = new bitcore.PrivateKey(bn)
 
-        var buf = Buffer.from(fs.readFileSync(properties.path().email.file).toString(), 'hex')
+        var buf = Buffer.from(fs.readFileSync('mail.txt').toString(), 'hex')
         var decryptor = ECIES().privateKey(key)
         var decrypted = decryptor.decrypt(buf).toString()
 

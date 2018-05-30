@@ -9,9 +9,11 @@
   <body>
       <div class="container">
       </div>
+      <script type="text/javascript" src="libs/peer.js"></script>
       <script>
         var root = document.getElementsByClassName('container')[0];
         require('./js/renderer.js');
+        global.Peer = Peer
       </script>
   </body>
 </html>

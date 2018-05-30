@@ -65,14 +65,14 @@ module.exports = {
 
         for (var i = 0; i < nodeList.length; i++)
             nodeList[i].value = ""
-        
+
         data.clearData()
     },
     setReceiverAddress: function (address) {
         this.receiverAddress = address
     },
     sendData: function () {
-        // Call here a method that sends the data.
+        // TODO Send
 
         m.route.set("/wallet")
     },
@@ -101,7 +101,7 @@ module.exports = {
                 m("div", {class: "row"}, [
                     m("input", {
                         type: "text",
-                        name: "number",
+                        name: "receiver",
                         placeholder: "Send to",
                         name: "receiverAddress",
                         oninput: m.withAttr("value", this.setReceiverAddress.bind(this)),
