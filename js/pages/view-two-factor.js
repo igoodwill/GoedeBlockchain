@@ -8,7 +8,10 @@ module.exports = {
             m("div", {class: "row"}, [
                 m("img", {src: global.filesystem.otp.qr})
             ]),
-            m("p", global.filesystem.otp.secret.ascii)
+            m("p", global.filesystem.otp.secret.ascii),
+            m("div", {class: "back"}, [
+                m("a", {href: "#!/wallet"}, "Back to wallet")
+            ])
         ])
     }
 }
