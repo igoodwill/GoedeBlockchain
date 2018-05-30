@@ -7,8 +7,6 @@ function search(dataTypeId, value) {
 
     return allData.filter(function (val) {
         return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
-    }).map(function (val) {
-        return val.dataName
     })
 }
 
@@ -53,7 +51,7 @@ module.exports = {
                     }, dataTypes.map(function(val, id) {
                         return m(id === this.selectedDataType ? "option[selected]" : "option", {
                             value: id
-                        }, val)
+                        }, val.dataName)
                     }))
                 ])
             ]),
