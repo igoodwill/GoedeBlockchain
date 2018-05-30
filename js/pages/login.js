@@ -43,7 +43,7 @@ module.exports = {
         	// If any error occurred, return the message about this error (note that it will be shown to the user).
 
         if (message.toLowerCase() === "ok") {
-            if (isTwoFactorEnabled())
+            if (global.filesystem.otp.enabled)
                 m.route.set("/two-factor")
             else
                 m.route.set("/wallet")

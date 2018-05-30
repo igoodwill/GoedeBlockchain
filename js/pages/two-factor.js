@@ -16,7 +16,7 @@ module.exports = {
             return
         }
 
-    	var message = "Ok" // Call here a method that authorizes the user.
+    	var message = global.filesystem.checkOtpCode(this.code) // Call here a method that authorizes the user.
             // It should return "Ok", if the user is authorized.
         	// If any error occurred, return the message about this error (note that it will be shown to the user).
 

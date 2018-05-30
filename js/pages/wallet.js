@@ -26,6 +26,19 @@ module.exports = {
 	transactions: function() {
 		m.route.set("/transactions")
 	},
+    switch2fa: function() {
+	    if(global.filesystem.data.otpenabled) {
+	        global.filesystem.data.otpenabled = false
+            global.filesystem.otp.enabled = false
+            global.filesystem.writeData()
+        } else {
+            global.filesystem.data.otpenabled = true
+            global.filesystem.otp.enabled = true
+            global.filesystem.writeData()
+
+            m.route.set("/view-two-factor")
+        }
+	    },
 	view: function () {
     	return m("div", [
             m("div", {class: "centered-text"}, [
@@ -58,6 +71,11 @@ module.exports = {
                 m("button", {
                 	onclick: this.transactions.bind(this)
                 }, "Transactions")
+            ]),
+            m("div", {class: "centered-text"}, [
+                m("button", {
+                    onclick: this.switch2fa.bind(this)
+                }, (global.filesystem.otp.enabled ? "Disable 2FA" : "Enable 2FA"))
             ]),
             m("div", {class: "back"}, [
                 m("a", {

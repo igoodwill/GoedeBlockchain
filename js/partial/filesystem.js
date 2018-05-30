@@ -2,6 +2,8 @@ const fs = require('fs')
 const bitcore = require("bitcore-lib")
 const ECIES = require("bitcore-ecies")
 const Mnemonic = require("bitcore-mnemonic")
+const speakeasy = require('speakeasy')
+const QRCode = require('qrcode')
 
 var filesystem = {
     data: undefined,
@@ -77,6 +79,10 @@ var filesystem = {
             if(this.data.email != email && this.data.name != email) {
                 return "Wrong credentials provided"
             }
+
+            //Post-login code
+            this.initOtp()
+
             return "ok"
         } else {
             return "Could not decrypt user data"
@@ -107,12 +113,37 @@ var filesystem = {
         return decrypted;
     },
 
+    initOtp: function() {
+        this.otp = {}
+        this.otp.secret = this.data.otpsecret
+        this.otp.enabled = this.data.otpenabled
+
+        QRCode.toDataURL(this.data.otpsecret.otpauth_url, this.saveQr.bind(this))
+    },
+
+    checkOtpCode: function(code) {
+        return speakeasy.totp.verify({
+            secret: filesystem.otp.secret.base32,
+            encoding: 'base32',
+            token: code
+        })  ? "Ok" : "Wrong TOTP code!"
+    },
+
+    saveQr: function(err, data_url) {
+        this.otp.qr = data_url
+    },
+
     //Creates files with default data for given credentials
     register: function (email, username, password) {
         this.seed = email + password
         this.setData(this.defaultData)
         this.data.email = email
         this.data.name = username
+        this.data.otpsecret = speakeasy.generateSecret()
+        this.data.otpenabled = false
+
+        this.initOtp()
+
         this.writeData()
 
         this.encryptMail(username + password, email)
