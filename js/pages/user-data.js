@@ -54,13 +54,13 @@ module.exports = {
                     }, dataTypes.map(function(val, id) {
                         return m(id === this.selectedDataType ? "option[selected]" : "option", {
                             value: id
-                        }, val.dataName)
+                        }, val)
                     }))
                 ])
             ]),
 			m("ul", [
                 this.dataToShow.map(function(val) {
-                    return m("li", val)
+                    return m("li", val.dataName)
                 })
             ]),
 			m("div", {class: "row"}, [
