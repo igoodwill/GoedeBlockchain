@@ -275,3 +275,13 @@ li > label {
 .spoiler input:checked ~ .spoiler-data {
 	display: block;
 }
+
+li.spoiler {
+	width: 100%;
+	margin-left: 0;
+}
+
+label.spoiler {
+	width: 90%;
+	margin-left: 6%;
+}

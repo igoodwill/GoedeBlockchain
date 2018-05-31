@@ -57,7 +57,7 @@ module.exports = {
             ]),
 			m("ul", [
                 this.dataToShow.map(function(val, id) {
-                    return m("li", [
+                    return m("li", {class: "spoiler"}, [
                             m("label", {
                                 class: "spoiler",
                                 for: id
