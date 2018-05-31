@@ -52,17 +52,6 @@ input[type="password"]:focus {
 	border: none;
 }
 
-input[type="checkbox"] {
-	outline: 2px solid #800080;
-	border: none !important;
-	margin-right: 10px;
-}
-
-input[type="checkbox"]:checked {
-	outline: 2px solid #800080;
-	border: none !important;
-}
-
 select {
 	color: #800080;
 	outline: 2px solid #800080;
@@ -180,7 +169,7 @@ li > label {
 	background-color: rgba(128, 0, 128, 0.6);
 }
 
-::-webkit-scrollbar-button:vertical:start:decrement{
+::-webkit-scrollbar-button:vertical:start:decrement {
 	display: block;
 	background-size: 70%;
 	background-image: url(scrollbar/arrow-up.png);
@@ -188,7 +177,7 @@ li > label {
 	background-position: 3px 5px, 0 0;
 }
 
-::-webkit-scrollbar-button:vertical:end:increment{
+::-webkit-scrollbar-button:vertical:end:increment {
 	display: block;
 	background-size: 70%;
 	background-image: url(scrollbar/arrow-down.png);
@@ -196,11 +185,11 @@ li > label {
 	background-position: 3px 5px, 0 0;
 }
 
-::-webkit-scrollbar-button:vertical:start:decrement:hover{
+::-webkit-scrollbar-button:vertical:start:decrement:hover {
 	background-image: url(scrollbar/arrow-up-hover.png);
 }
 
-::-webkit-scrollbar-button:vertical:end:increment:hover{
+::-webkit-scrollbar-button:vertical:end:increment:hover {
 	background-image: url(scrollbar/arrow-down-hover.png);
 }
 
@@ -255,4 +244,34 @@ li > label {
   border: solid #800080;
   border-width: 0 3px 3px 0;
   transform: rotate(45deg);
-} 
+}
+
+.spoiler {
+	cursor: pointer;
+}
+
+.spoiler > input[type="checkbox"] {
+	display: none;
+}
+
+.spoiler-icon {
+	border: solid #800080;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 5px;
+	float:right;
+	transform: rotate(135deg);
+	cursor: pointer;
+}
+
+.spoiler input:checked ~ .spoiler-icon {
+	transform: rotate(45deg);
+}
+
+.spoiler-data {
+	display: none;
+}
+
+.spoiler input:checked ~ .spoiler-data {
+	display: block;
+}

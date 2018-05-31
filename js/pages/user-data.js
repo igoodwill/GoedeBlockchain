@@ -59,8 +59,20 @@ module.exports = {
                 ])
             ]),
 			m("ul", [
-                this.dataToShow.map(function(val) {
-                    return m("li", val.dataName)
+                this.dataToShow.map(function(val, id) {
+                    return m("li", [
+                            m("label", {
+                                class: "spoiler",
+                                for: id
+                            }, [
+                                m("input", {
+                                    type: "checkbox",
+                                    id: id
+                                }),
+                                m("span", {class: "spoiler-icon"}),
+                                m("pre[class=\"spoiler-data\"]", val.data)
+                            ], val.dataName)
+                    ])
                 })
             ]),
 			m("div", {class: "row"}, [

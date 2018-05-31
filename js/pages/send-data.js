@@ -96,14 +96,14 @@ module.exports = {
         }
 
         var stringData = ""
-
-        for (var i = 0; i < data.data.length; i++)
+        for (var i = 0; i < data.data.length - 1; i++)
             stringData += global.dataTypesFieldsNames[this.selectedDataType][i] + ": " + data.data[i] + "\n"
+        stringData += global.dataTypesFieldsNames[this.selectedDataType][data.data.length - 1] + ": " + data.data[data.data.length - 1]
 
         p2p.sendData(global.peer, this.receiverAddress, {
             dataName: this.dataName,
             dataType: this.selectedDataType,
-            data: stringData.trim()
+            data: stringData
         })
 
         m.route.set("/wallet")
