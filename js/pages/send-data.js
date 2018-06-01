@@ -101,9 +101,12 @@ module.exports = {
         stringData += global.dataTypesFieldsNames[this.selectedDataType][data.data.length - 1] + ": " + data.data[data.data.length - 1]
 
         p2p.sendData(global.peer, this.receiverAddress, {
-            dataName: this.dataName,
-            dataType: this.selectedDataType,
-            data: stringData
+            isRequest: false,
+            data: {
+                dataName: this.dataName,
+                dataType: this.selectedDataType,
+                data: stringData
+            }
         })
 
         m.route.set("/wallet")
@@ -134,7 +137,8 @@ module.exports = {
                         type: "text",
                         name: "dataName",
                         placeholder: "Data name",
-                        oninput: m.withAttr("value", this.setDataName.bind(this))
+                        oninput: m.withAttr("value", this.setDataName.bind(this)),
+                        value: this.dataName
                     })
                 ]),
                 fields[this.selectedDataType],

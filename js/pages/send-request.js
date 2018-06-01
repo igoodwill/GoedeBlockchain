@@ -1,11 +1,8 @@
 const m = require('mithril')
+const p2p = require('../partial/p2p.js')
 
-function getContactsNames() {
-    var contactsNames = [
-        "Name 1", "Name 2", "Name 3", "Name 4", "Name 5", "Name 6"
-    ] // Call here a method that returns an array of contacts' names.
-
-    return contactsNames;
+function getContacts() {
+    return global.filesystem.data.contacts;
 }
 
 const fieldsToRequest = [ // Fields of data types which are displayed to user.
@@ -41,7 +38,6 @@ const fieldsToRequest = [ // Fields of data types which are displayed to user.
 ]
 
 const dataTypes = global.dataTypes
-const contactsNames = getContactsNames()
 
 module.exports = {
     selectedDataType: 0,
@@ -57,24 +53,38 @@ module.exports = {
             nodeList[i].checked = false
     },
     sendRequest: function() {
-        var checkedContacts = []
-        var nodeList = document.getElementsByName('contact')
-
-        for (var i = 0; i < nodeList.length; i++)
-            checkedContacts[i] = nodeList[i].checked
-
         var checkedFields = []
-        nodeList = document.getElementsByName('fieldToRequest')
+        var nodeList = document.getElementsByName('fieldToRequest')
+
+        var flag = true
+        for (var i = 0; i < nodeList.length; i++) {
+            if (nodeList[i].checked) {
+                checkedFields.push(global.dataTypesFieldsNames[this.selectedDataType][i])
+                flag = false
+            }
+        }
+
+        if (flag) {
+            alert("Choose at least one field to request, please!")
+            return
+        }
+
+        nodeList = document.getElementsByName('contact')
+        var contactNames = getContacts()
 
         for (var i = 0; i < nodeList.length; i++)
-            checkedFields[i] = nodeList[i].checked
-
-        alert(checkedContacts + "\n" + checkedFields + "\n" + this.selectedDataType)// Call here a method that sends the request.
+            if (nodeList[i].checked)
+                p2p.sendData(global.peer, contactNames[i], {
+                    isRequest: true,
+                    data: {
+                        dataType: this.selectedDataType,
+                        fieldsToRequest: checkedFields
+                    }
+                })
 
         m.route.set("/contacts")
     },
     cancel: function() {
-        this.checkedContacts = []
         m.route.set("/contacts")
     },
     view: function () {
@@ -83,7 +93,7 @@ module.exports = {
             m("div[class=\"center\"]", [
                 m("label", "Select contact(s)"),
                 m("ul", [
-                    contactsNames.map(function(contactName, id) {
+                    getContacts().map(function(contact, id) {
                         return m("li", [
                             m("label", {
                                 class: "custom-checkbox",
@@ -95,7 +105,7 @@ module.exports = {
                                     name: "contact"
                                 }),
                                 m("span", {class: "custom-checkmark"})
-                            ], contactName)
+                            ], contact)
                         ])
                     })
                 ]),

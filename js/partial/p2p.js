@@ -17,7 +17,13 @@ var p2p = {
     },
     getData: function (connection) {
         connection.on('data', function (data) {
-            global.filesystem.data.receivedData[global.filesystem.data.receivedData.length] = data
+            if (data.isRequest) {
+                data.data.requestedFrom = connection.peer
+                global.filesystem.data.requests.push(data.data)
+            }
+            else
+                global.filesystem.data.receivedData.push(data.data)
+            
             global.filesystem.writeData()
         });
     }

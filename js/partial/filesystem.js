@@ -17,7 +17,9 @@ var filesystem = {
         name: "",
         email: "",
         userData: [],
-        receivedData: []
+        receivedData: [],
+        requests: [],
+        contacts: []
     },
 
     seed: "",
