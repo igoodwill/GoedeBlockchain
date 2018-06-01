@@ -5,38 +5,6 @@ function getContacts() {
     return global.filesystem.data.contacts;
 }
 
-const fieldsToRequest = [ // Fields of data types which are displayed to user.
-    m("div", [
-        m("label", {class: "custom-checkbox"}, [
-            m("input", {
-                type: "checkbox",
-                name: "fieldToRequest",
-                style: "float: left;"
-            }),
-            m("span", {class: "custom-checkmark"})
-        ], "First name"),
-        m("label", {class: "custom-checkbox"}, [
-            m("input", {
-                type: "checkbox",
-                name: "fieldToRequest",
-                style: "float: left;"
-            }),
-            m("span", {class: "custom-checkmark"})
-        ], "Second name")
-    ]),
-
-    m("div", [
-        m("label", {class: "custom-checkbox"}, [
-            m("input", {
-                type: "checkbox",
-                name: "fieldToRequest",
-                style: "float: left;"
-            }),
-            m("span", {class: "custom-checkmark"})
-        ], "Phone number")
-    ])
-]
-
 const dataTypes = global.dataTypes
 
 module.exports = {
@@ -123,7 +91,18 @@ module.exports = {
                         }))
                     ])
                 ]),
-                fieldsToRequest[this.selectedDataType],
+                global.dataTypesFieldsNames[this.selectedDataType].map(function (value) {
+                    return [
+                        m("label", {class: "custom-checkbox"}, [
+                            m("input", {
+                                type: "checkbox",
+                                name: "fieldToRequest",
+                                style: "float: left;"
+                            }),
+                            m("span", {class: "custom-checkmark"})
+                        ], value),
+                    ]
+                }),
                 m("div", {class: "row"}, [
                     m("button", {
                         style: "margin-right: 10px;",

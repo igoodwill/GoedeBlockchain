@@ -11,46 +11,6 @@ var data = {
 }
 
 const dataTypes = global.dataTypes
-const fields = [ // Fields of data types which are displayed to user.
-    m("div", [
-        m("label", "First name"),
-        m("div", {class: "row"}, [
-            m("input", {
-                type: "text",
-                name: "dataTypeField",
-                placeholder: "First name",
-                oninput: m.withAttr("value", function (val) {
-                    data.setData(0, val)
-                })
-            })
-        ]),
-        m("label", "Last name"),
-        m("div", {class: "row"}, [
-            m("input", {
-                type: "text",
-                name: "dataTypeField",
-                placeholder: "Last name",
-                oninput: m.withAttr("value", function (val) {
-                    data.setData(1, val)
-                })
-            })
-        ])
-    ]),
-
-    m("div", [
-        m("label", "Phone number"),
-        m("div", {class: "row"}, [
-            m("input", {
-                type: "tel",
-                name: "dataTypeField",
-                placeholder: "Phone number",
-                oninput: m.withAttr("value", function (val) {
-                    data.setData(0, val)
-                })
-            })
-        ])
-    ])
-]
 
 module.exports = {
 	selectedDataType: 0,
@@ -130,7 +90,21 @@ module.exports = {
                         oninput: m.withAttr("value", this.setDataName.bind(this))
                     })
                 ]),
-                fields[this.selectedDataType],
+                global.dataTypesFieldsNames[this.selectedDataType].map(function (value, id) {
+                    return [
+                        m("label", value),
+                        m("div", {class: "row"}, [
+                            m("input", {
+                                type: "text",
+                                name: "dataTypeField",
+                                placeholder: value,
+                                oninput: m.withAttr("value", function (val) {
+                                    data.setData(id, val)
+                                })
+                            })
+                        ])
+                    ]
+                }),
                 m("div", {class: "row"}, [
                     m("button", {
                         style: "margin-right: 10px;",
