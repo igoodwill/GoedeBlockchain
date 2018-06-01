@@ -173,7 +173,7 @@ li > label {
 ::-webkit-scrollbar-button:vertical:start:decrement {
 	display: block;
 	background-size: 70%;
-	background-image: url(scrollbar/arrow-up.png);
+	background-image: url(../assets/arrow-up.png);
 	background-repeat: no-repeat;
 	background-position: 3px 5px, 0 0;
 }
@@ -181,17 +181,17 @@ li > label {
 ::-webkit-scrollbar-button:vertical:end:increment {
 	display: block;
 	background-size: 70%;
-	background-image: url(scrollbar/arrow-down.png);
+	background-image: url(../assets/arrow-down.png);
 	background-repeat: no-repeat;
 	background-position: 3px 5px, 0 0;
 }
 
 ::-webkit-scrollbar-button:vertical:start:decrement:hover {
-	background-image: url(scrollbar/arrow-up-hover.png);
+	background-image: url(../assets/arrow-up-hover.png);
 }
 
 ::-webkit-scrollbar-button:vertical:end:increment:hover {
-	background-image: url(scrollbar/arrow-down-hover.png);
+	background-image: url(../assets/arrow-down-hover.png);
 }
 
 .custom-checkbox {

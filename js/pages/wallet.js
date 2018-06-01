@@ -8,7 +8,9 @@ function getPublicKey() {
 
 module.exports = {
 	logout: function() {
-		alert("Logged out") // Call here a method that logs out the user, if any actions should be done.
+		global.filesystem.data = undefined
+        global.filesystem.seed = ""
+        global.peer.destroy()
 	},
 	userData: function() {
 		m.route.set("/user-data")
