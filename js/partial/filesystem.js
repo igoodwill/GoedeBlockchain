@@ -1,3 +1,4 @@
+const {dialog} = require('electron').remote
 const fs = require('fs')
 const bitcore = require("bitcore-lib")
 const ECIES = require("bitcore-ecies")
@@ -23,10 +24,11 @@ var filesystem = {
     },
 
     seed: "",
+    folderPath: "",
 
     //Checks the availability of all the files required
     filesExist: function() {
-        return fs.existsSync('data.txt')
+        return fs.existsSync(this.folderPath + '/data.txt')
     },
 
     //Loads and decrypts user data using mnemonic
@@ -39,7 +41,7 @@ var filesystem = {
         var bn = bitcore.crypto.BN.fromBuffer(hash)
         var key = new bitcore.PrivateKey(bn)
 
-        var buf = Buffer.from(fs.readFileSync('data.txt').toString(), 'hex')
+        var buf = Buffer.from(fs.readFileSync(this.folderPath + '/data.txt').toString(), 'hex')
         var decryptor = ECIES().privateKey(key)
 
         try {
@@ -71,7 +73,7 @@ var filesystem = {
 
         var encryptor = ECIES().privateKey(key).publicKey(key.publicKey)
         var buf = encryptor.encrypt(JSON.stringify(this.data));
-        fs.writeFileSync('data.txt', buf.toString('hex'))
+        fs.writeFileSync(this.folderPath + '/data.txt', buf.toString('hex'))
     },
 
     //Tries to load user data using password
@@ -101,7 +103,7 @@ var filesystem = {
 
         var encryptor = ECIES().privateKey(key).publicKey(key.publicKey)
         var buf = encryptor.encrypt(email);
-        fs.writeFileSync('mail.txt', buf.toString('hex'))
+        fs.writeFileSync(this.folderPath + '/mail.txt', buf.toString('hex'))
     },
 
     decryptEmail: function(username) {
@@ -110,7 +112,7 @@ var filesystem = {
         var bn = bitcore.crypto.BN.fromBuffer(hash)
         var key = new bitcore.PrivateKey(bn)
 
-        var buf = Buffer.from(fs.readFileSync('mail.txt').toString(), 'hex')
+        var buf = Buffer.from(fs.readFileSync(this.folderPath + '/mail.txt').toString(), 'hex')
         var decryptor = ECIES().privateKey(key)
         var decrypted = decryptor.decrypt(buf).toString()
 
@@ -139,7 +141,22 @@ var filesystem = {
 
     //Creates files with default data for given credentials
     register: function (email, username, password) {
+        this.folderPath = dialog.showOpenDialog({
+            message: "Choose the directory where your account folder will be created, please!",
+            properties: ['openDirectory', 'showHiddenFiles', 'createDirectory']
+        })
+
+        if (!this.folderPath)
+            return "The directory has to be choosen!"
+
         this.seed = email + password
+
+        global.chain.loadKeyFromSeed(this.seed)
+        this.folderPath += "/" + global.chain.address
+
+        if (!fs.existsSync(this.folderPath))
+            fs.mkdirSync(this.folderPath)
+
         this.setData(this.defaultData)
         this.data.email = email
         this.data.name = username

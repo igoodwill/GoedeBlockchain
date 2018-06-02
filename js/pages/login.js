@@ -1,11 +1,18 @@
+const {dialog} = require('electron').remote
 const m = require('mithril')
-const filesystem = require('../partial/filesystem.js')
 const p2p = require('../partial/p2p.js')
 
 const PASSWORD_PLACEHOLDER = "********"
 
 function isTwoFactorEnabled() {
     return true // Change it! True should be returned if the user have enabled two factor auth, else - false.
+}
+
+function requestFolderPath() {
+    return dialog.showOpenDialog({
+        message: "Choose the account folder, please!",
+        properties: ['openDirectory', 'showHiddenFiles']
+    })
 }
 
 module.exports = {
@@ -38,6 +45,13 @@ module.exports = {
             return
         }
 
+        global.filesystem.folderPath = requestFolderPath()
+
+        if (!global.filesystem.folderPath) {
+            alert("The account folder has to be choosen!")
+            return
+        }
+
     	var message = filesystem.unlock(this.username, this.password)
             // Call here a method that authorizes the user.
             // It should return "Ok", if the user is authorized or two factor auth is enabled (and username-password combination is correct).
@@ -47,7 +61,6 @@ module.exports = {
             if (global.filesystem.otp.enabled)
                 m.route.set("/two-factor")
             else {
-                global.chain.loadKeyFromSeed(global.filesystem.seed)
                 global.peer = p2p.createPeer(global.chain.address);
                 global.peer.on('connection', p2p.getData);
 

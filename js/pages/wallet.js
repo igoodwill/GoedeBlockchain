@@ -10,6 +10,7 @@ module.exports = {
 	logout: function() {
 		global.filesystem.data = undefined
         global.filesystem.seed = ""
+        global.filesystem.folderPath = ""
         global.peer.destroy()
 	},
 	userData: function() {
@@ -39,7 +40,7 @@ module.exports = {
 
             m.route.set("/view-two-factor")
         }
-	    },
+    },
 	view: function () {
     	return m("div", [
             m("div", {class: "centered-text"}, [
