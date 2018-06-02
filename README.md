@@ -32,12 +32,18 @@ To distribute the application with Electron, you need download Electron's prebui
 On Windows and Linux:
 
 ```bash
+# Go into the repository
+cd GoedeBlockchain
+# Make the application
 npm run make
 ```
 
 On macOS:
 
 ```bash
+# Go into the repository
+cd GoedeBlockchain
+# Make the application
 npm run make-mac
 ```
 
