@@ -1,45 +1,60 @@
 const m = require('mithril')
 const p2p = require('../partial/p2p.js')
 
-var data = {
-    data: [],
-    setData: function(id, val) {
-        this.data[id] = val
-    },
-    clearData: function() {
-        this.data = []
-    }
+function search(dataTypeId, value) {
+    var allData = global.filesystem.data.userData
+
+    return allData.filter(function (val) {
+        return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
+    })
 }
 
 const dataTypes = global.dataTypes
 
 module.exports = {
-    dataName: "",
-    setDataName: function (name) {
-        this.dataName = name
+    dataToShow: [],
+    selectedData: 0,
+    searchFor: "",
+    setDataToSend: function (id) {
+        this.selectedData = id
     },
-    send: function() {        
-        var flag = true
+    setSearchFor: function (searchFor) {
+        this.searchFor = searchFor
+    },
+    search: function () {
+        this.dataToShow = search(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].dataType, this.searchFor)
+    },
+    send: function() {  
+        if (!this.dataToShow[this.selectedData]) {
+            alert("Choose the data to send, please!")
+            return
+        }
+
         var stringData = ""
-        for (var i = 0; i < data.data.length - 1; i++) {
-            if (data.data[i]) {
+        var nodeList = document.getElementsByName('fieldToSend')
+
+        var flag = true
+        for (var i = 0; i < nodeList.length - 1; i++) {
+            if (nodeList[i].checked) {
+                var id = this.dataToShow[this.selectedData].data.indexOf(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[i])
+                stringData += this.dataToShow[this.selectedData].data.substring(id, this.dataToShow[this.selectedData].data.indexOf("\n", id + 1) + 1);
                 flag = false
-                stringData += global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[i] + ": " + data.data[i] + "\n"
             }
         }
 
-        if (flag && ! data.data[data.data.length - 1]) {
+        if (flag && !nodeList[nodeList.length - 1].checked) {
             alert("Choose at least one field to send, please!")
             return
         }
 
-        stringData += global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[data.data.length - 1] + ": " + data.data[data.data.length - 1]
+        var id = this.dataToShow[this.selectedData].data.indexOf(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[nodeList.length - 1])
+        stringData += this.dataToShow[this.selectedData].data.substring(id, this.dataToShow[this.selectedData].data.indexOf("\n", id + 1));
 
         p2p.sendData(global.peer, global.filesystem.data.requests[global.filesystem.data.requests.length - 1].requestedFrom, {
             isRequest: false,
             data: {
-                dataName: this.dataName,
-                dataType: global.filesystem.data.requests[global.filesystem.data.requests.length - 1].dataType,
+                dataName: this.dataToShow[this.selectedData].dataName,
+                dataType: this.dataToShow[this.selectedData].dataType,
                 data: stringData
             }
         })
@@ -66,30 +81,45 @@ module.exports = {
                     m("hr"),
                     m("label", "Requested data: " + dataTypes[global.filesystem.data.requests[global.filesystem.data.requests.length - 1].dataType].toLowerCase()),
                     m("br"),
-                    m("label", "Data name"),
                     m("div", {class: "row"}, [
                         m("input", {
-                            type: "text",
-                            name: "dataName",
-                            placeholder: "Data name",
-                            oninput: m.withAttr("value", this.setDataName.bind(this)),
-                            value: this.dataName
+                            class: "six columns",
+                            type: "search",
+                            placeholder: "Search",
+                            name: "search",
+                            oninput: m.withAttr("value", this.setSearchFor.bind(this)),
+                            value: this.searchFor
                         })
+                    ]),
+                    m("div", {class: "row"}, [
+                        m("button", {onclick: this.search.bind(this)}, "Search")
+                    ]),
+                    // TODO Attestation
+                    m("label", "Data to send:"),
+                    m("div", {class: "row"}, [
+                        m("div", {class: "six columns"}, [
+                            m("select", {
+                                id: "data",
+                                class: "u-full-width",
+                                onchange: m.withAttr("selectedIndex", this.setDataToSend.bind(this)),
+                            }, this.dataToShow.map(function(val, id) {
+                                return m(id === this.selectedData ? "option[selected]" : "option", {
+                                    value: id
+                                }, val.dataName)
+                            }))
+                        ])
                     ]),
                     m("label", "Requested attributes:"),
                     global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest.map(function (value, id) {
                         return [
-                            m("label", value),
-                            m("div", {class: "row"}, [
+                            m("label", {class: "custom-checkbox"}, [
                                 m("input", {
-                                    type: "text",
-                                    name: "dataTypeField",
-                                    placeholder: value,
-                                    oninput: m.withAttr("value", function (val) {
-                                        data.setData(id, val)
-                                    })
-                                })
-                            ])
+                                    type: "checkbox",
+                                    name: "fieldToSend",
+                                    style: "float: left;"
+                                }),
+                                m("span", {class: "custom-checkmark"})
+                            ], value),
                         ]
                     }),
                     m("div", {class: "row"}, [

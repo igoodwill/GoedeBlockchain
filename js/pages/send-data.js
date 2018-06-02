@@ -1,21 +1,21 @@
 const m = require('mithril')
 const p2p = require('../partial/p2p.js')
 
-var data = {
-    data: [],
-    setData: function(id, val) {
-        this.data[id] = val
-    },
-    clearData: function() {
-        this.data = []
-    }
+function search(dataTypeId, value) {
+    var allData = global.filesystem.data.userData
+
+    return allData.filter(function (val) {
+        return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
+    })
 }
 
 const dataTypes = global.dataTypes
 
 module.exports = {
+    dataToShow: [],
     selectedDataType: 0,
-    dataName: "",
+    selectedData: 0,
+    searchFor: "",
     receiverAddress: "",
     setDataType: function (id) {
         if (id === this.selectedDataType)
@@ -30,43 +30,32 @@ module.exports = {
 
         data.clearData()
     },
-    setDataName: function (name) {
-        this.dataName = name
+    setDataToSend: function (id) {
+        this.selectedData = id
+    },
+    setSearchFor: function (searchFor) {
+        this.searchFor = searchFor
+    },
+    search: function () {
+        this.dataToShow = search(this.selectedDataType, this.searchFor)
     },
     setReceiverAddress: function (address) {
         this.receiverAddress = address
     },
     sendData: function () {
-        if (!this.dataName) {
-            alert("Input data name, please!")
+        if (!this.dataToShow[this.selectedData]) {
+            alert("Choose the data to send, please!")
             return
         }
-
-        var nodeList = document.getElementsByName('dataTypeField')
-
-        for (var i = 0; i < nodeList.length; i++)
-            if (!nodeList[i].value) {
-                alert("Input all data fields, please!")
-                return
-            }
 
         if (!this.receiverAddress) {
             alert("Input receiver's public key, please!")
             return
         }
 
-        var stringData = ""
-        for (var i = 0; i < data.data.length - 1; i++)
-            stringData += global.dataTypesFieldsNames[this.selectedDataType][i] + ": " + data.data[i] + "\n"
-        stringData += global.dataTypesFieldsNames[this.selectedDataType][data.data.length - 1] + ": " + data.data[data.data.length - 1]
-
         p2p.sendData(global.peer, this.receiverAddress, {
             isRequest: false,
-            data: {
-                dataName: this.dataName,
-                dataType: this.selectedDataType,
-                data: stringData
-            }
+            data: this.dataToShow[this.selectedData]
         })
 
         m.route.set("/wallet")
@@ -79,62 +68,67 @@ module.exports = {
     		m("div", {class: "centered-text"}, [
                 m("h4", "Send data")
             ]),
-            m("div", {class: "left"}, [
-                m("select", {
-                    id: "dataType",
-                    class: "u-full-width",
-                    onchange: m.withAttr("selectedIndex", this.setDataType.bind(this)),
-                }, dataTypes.map(function(val, id) {
-                    return m(id === this.selectedDataType ? "option[selected]" : "option", {
-                        value: id
-                    }, val)
-                }))
-            ]),
-            m("div", {class: "right"}, [
-                m("label", "Data name"),
-                m("div", {class: "row"}, [
-                    m("input", {
-                        type: "text",
-                        name: "dataName",
-                        placeholder: "Data name",
-                        oninput: m.withAttr("value", this.setDataName.bind(this)),
-                        value: this.dataName
-                    })
-                ]),
-                global.dataTypesFieldsNames[this.selectedDataType].map(function (value, id) {
-                    return [
-                        m("label", value),
-                        m("div", {class: "row"}, [
-                            m("input", {
-                                type: "text",
-                                name: "dataTypeField",
-                                placeholder: value,
-                                oninput: m.withAttr("value", function (val) {
-                                    data.setData(id, val)
-                                })
-                            })
-                        ])
-                    ]
+            m("div", {class: "row"}, [
+                m("input", {
+                    class: "six columns",
+                    type: "search",
+                    placeholder: "Search",
+                    name: "search",
+                    oninput: m.withAttr("value", this.setSearchFor.bind(this)),
+                    value: this.searchFor
                 }),
-                m("label", "Send to:"),
-                m("div", {class: "row"}, [
-                    m("input", {
-                        type: "text",
-                        name: "receiver",
-                        placeholder: "Receiver's public key",
-                        name: "receiverAddress",
-                        oninput: m.withAttr("value", this.setReceiverAddress.bind(this))
-                    })
-                ]),
-                m("div", {class: "row"}, [
-                    m("button", {
-                        style: "margin-right: 10px;",
-                        onclick: this.sendData.bind(this)
-                    }, "Send"),
-                    m("button", {
-                        onclick: this.cancel.bind(this)
-                    }, "Cancel")
+                m("button", {
+                    class: "small-btn",
+                    style: "margin-left: 130px;",
+                    onclick: this.search.bind(this)
+                }, "Search")
+            ]),
+            // TODO Attestation
+            m("div", {class: "row"}, [
+                m("div", {class: "six columns"}, [
+                    m("select", {
+                        id: "dataType",
+                        class: "u-full-width",
+                        onchange: m.withAttr("selectedIndex", this.setDataType.bind(this)),
+                    }, dataTypes.map(function(val, id) {
+                        return m(id === this.selectedDataType ? "option[selected]" : "option", {
+                            value: id
+                        }, val)
+                    }))
                 ])
+            ]),
+            m("label", "Data to send:"),
+            m("div", {class: "row"}, [
+                m("div", {class: "six columns"}, [
+                    m("select", {
+                        id: "data",
+                        class: "u-full-width",
+                        onchange: m.withAttr("selectedIndex", this.setDataToSend.bind(this)),
+                    }, this.dataToShow.map(function(val, id) {
+                        return m(id === this.selectedData ? "option[selected]" : "option", {
+                            value: id
+                        }, val.dataName)
+                    }))
+                ])
+            ]),
+            m("label", "Send to:"),
+            m("div", {class: "row"}, [
+                m("input", {
+                    type: "text",
+                    name: "receiver",
+                    placeholder: "Receiver's public key",
+                    name: "receiverAddress",
+                    oninput: m.withAttr("value", this.setReceiverAddress.bind(this))
+                })
+            ]),
+            m("div", {class: "row"}, [
+                m("button", {
+                    style: "margin-right: 10px;",
+                    onclick: this.sendData.bind(this)
+                }, "Send"),
+                m("button", {
+                    onclick: this.cancel.bind(this)
+                }, "Cancel")
             ])
     	])
     }

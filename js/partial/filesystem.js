@@ -88,6 +88,8 @@ var filesystem = {
 
             //Post-login code
             this.initOtp()
+            
+            global.chain.loadKeyFromSeed(this.seed)
 
             return "ok"
         } else {
