@@ -11,7 +11,7 @@
     "url": "git://github.com/igoodwill/GoedeBlockchain.git"
   },
   "author": "igoodwill",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "devDependencies": {
     "electron": "~1.8.2"
   },
