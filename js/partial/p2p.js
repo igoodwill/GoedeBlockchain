@@ -1,9 +1,6 @@
 var p2p = {
     createPeer: function (id) {
-        peer = new global.Peer(id, {
-            host: 'bozhko.net',
-            port: '9000'
-        })
+        peer = new global.Peer(id, global.peerServer)
         return peer
     },
     sendData: function (from_peer, to_peer_id, data) {

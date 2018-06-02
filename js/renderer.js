@@ -1,4 +1,11 @@
 const m = require('mithril')
+
+global.peerServer = {
+    host: 'bozhko.net',
+    port: '9000'
+}
+global.blockchainServer = "https://openchain.bozhko.net/"
+
 global.filesystem = require('./partial/filesystem.js')
 global.chain = require('./partial/chain.js')
 

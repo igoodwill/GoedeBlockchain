@@ -4,7 +4,7 @@ var Mnemonic = require("bitcore-mnemonic");
 
 //TODO Implement state system
 var chain = {
-    client: new openchain.ApiClient("https://openchain.bozhko.net/"),
+    client: new openchain.ApiClient(global.blockchainServer),
     state: 0,
     baseKey: "",
     address: "",
