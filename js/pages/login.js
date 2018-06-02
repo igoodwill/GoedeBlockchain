@@ -48,7 +48,7 @@ module.exports = {
         global.filesystem.folderPath = requestFolderPath()
 
         if (!global.filesystem.folderPath) {
-            alert("The account folder has to be choosen!")
+            alert("The account folder has to be chosen!")
             return
         }
 

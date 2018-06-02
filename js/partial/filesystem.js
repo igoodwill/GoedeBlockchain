@@ -147,7 +147,7 @@ var filesystem = {
         })
 
         if (!this.folderPath)
-            return "The directory has to be choosen!"
+            return "The directory has to be chosen!"
 
         this.seed = email + password
 
