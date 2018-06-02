@@ -6,6 +6,19 @@ This is a client for GoedeBlockchain written with Electron and Mithril.js
 
 To use application, clone and run this repository:
 
+On Windows:
+
+```bash
+# Clone this repository
+git clone https://github.com/igoodwill/GoedeBlockchain.git
+# Go into the repository
+cd GoedeBlockchain
+# Install dependencies and run the application
+npm run install-start-win
+```
+
+On Linux or macOS:
+
 ```bash
 # Clone this repository
 git clone https://github.com/igoodwill/GoedeBlockchain.git
@@ -29,13 +42,22 @@ npm start
 
 To distribute the application with Electron, you need download Electron's prebuilt binaries named `electron-v1.8.7-*` [here](https://github.com/electron/electron/releases/tag/v1.8.7). Next, name this folder `electron`, put it in the same directory as the `GoedeBlockchain` folder and run the appropriate script.
 
-On Windows and Linux:
+On Windows:
 
 ```bash
 # Go into the repository
 cd GoedeBlockchain
 # Make the application
-npm run make
+npm run make-win
+```
+
+On Linux:
+
+```bash
+# Go into the repository
+cd GoedeBlockchain
+# Make the application
+npm run make-lin
 ```
 
 On macOS:
