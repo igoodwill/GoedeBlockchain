@@ -15,7 +15,9 @@ function updateTransactions() {
                 sender: fields[1],
                 receiver: fields[2],
                 value: fields[3],
-                dateTime: new Date(transactionsFromBlockchain[2 * i + 1]).toLocaleDateString()
+                dateTime: new Date(transactionsFromBlockchain[2 * i + 1]).toLocaleDateString("en-US", {
+                    month: 'numeric', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'
+                })
             }
         }
 
