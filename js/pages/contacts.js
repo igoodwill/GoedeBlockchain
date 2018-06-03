@@ -1,11 +1,26 @@
 const m = require('mithril')
 
-function getContacts() {
-    return global.filesystem.data.contacts;
-}
+var contacts = []
 
-function getTotalTransactionsByAddress(address) {
-    return 44 // TODO
+function updateContacts() {
+    Promise.all(global.filesystem.data.contacts.map(function (val) {
+        return {
+            name: val,
+            totalTransactions: 0
+        }
+    }).map(function (val) {
+        return global.chain.retrieveData("transactions", val.name).then(function (result) {
+            if (result.data)
+                val.totalTransactions = result.data.split("\n").length / 2
+            else
+                val.totalTransactions = 0
+
+            return val
+        })
+    })).then(function (result) {
+        contacts = result
+        m.redraw()
+    })
 }
 
 module.exports = {
@@ -24,6 +39,10 @@ module.exports = {
         global.filesystem.writeData()
 
         this.newContactAddress = ""
+        updateContacts()
+    },
+    oncreate: function() {
+        updateContacts()
     },
 	view: function () {
     	return m("div", [
@@ -34,10 +53,10 @@ module.exports = {
                     m("th", "Total Transactions")
                 ])]),
                 m("tbody", [
-                    getContacts().map(function(contact) {
+                    contacts.map(function(contact) {
                         return m("tr", [
-                            m("td", contact),
-                            m("td", getTotalTransactionsByAddress(contact))
+                            m("td", contact.name),
+                            m("td", contact.totalTransactions)
                         ])
                     })
                 ])

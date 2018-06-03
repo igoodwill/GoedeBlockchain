@@ -6,6 +6,19 @@ function onData(data, connection) {
             values = result.data.split("\n")
             global.chain.storeData(data.key, values[0] + "\n" + (parseInt(values[1]) + 1))
         })
+
+        global.chain.retrieveData("transactions", global.chain.address).then(function (result) {
+            if (result.data)
+                global.chain.storeData("transactions", result.data +
+                    "\n" + SHA256(global.chain.address.toString() + connection.peer + /* Value */ 10 + new Date().toString()).toString() + " " +
+                    global.chain.address.toString() + " " + connection.peer + " " + /* Value */ 10 + 
+                    "\n" + new Date().toString())
+            else
+                global.chain.storeData("transactions",
+                    SHA256(global.chain.address.toString() + connection.peer + /* Value */ 10 + new Date().toString()).toString() + " " +
+                    global.chain.address.toString() + " " + connection.peer + " " + /* Value */ 10 + 
+                    "\n" + new Date().toString())
+        })
     } else if (data.isRequest) {
         data.data.requestedFrom = connection.peer
         global.filesystem.data.requests.push(data.data)
@@ -30,6 +43,20 @@ function onData(data, connection) {
                 key: this.key
             })
         }.bind(this))
+
+
+        global.chain.retrieveData("transactions", global.chain.address).then(function (result) {
+            if (result.data)
+                    global.chain.storeData("transactions", result.data +
+                        "\n" + SHA256(connection.peer + global.chain.address.toString() + /* Value */ 10 + new Date().toString()).toString() + " " +
+                        connection.peer + " " + global.chain.address.toString() + " " + /* Value */ 10 + 
+                        "\n" + new Date().toString())
+            else
+                global.chain.storeData("transactions",
+                    SHA256(connection.peer + global.chain.address.toString() + /* Value */ 10 + new Date().toString()).toString() + " " +
+                    connection.peer + " " + global.chain.address.toString() + " " + /* Value */ 10 + 
+                    "\n" + new Date().toString())
+        })
     }
 }
 

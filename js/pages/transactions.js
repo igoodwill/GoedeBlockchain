@@ -1,26 +1,32 @@
 const m = require('mithril')
 
-function getTransactions() {
-    var transactions = [
-        {
-            hash: "HASH_1",
-            sender: "SENDER_1",
-            receiver: "SENDER_1",
-            value: "VALUE_1",
-            dateTime: "DATE_TIME_1"
-        }, {
-            hash: "HASH_2",
-            sender: "SENDER_2",
-            receiver: "SENDER_2",
-            value: "VALUE_2",
-            dateTime: "DATE_TIME_2"
-        }
-    ] // Call here a method that returns an array of transactions. A transaction must have fields: hash, sender, receiver, value, dateTime!
+var transactions = []
 
-    return transactions;
+function updateTransactions() {
+    global.chain.retrieveData("transactions", global.chain.address).then(function (result) {
+        if (result.data === null)
+            return
+
+        var transactionsFromBlockchain = result.data.split("\n")
+        for (var i = 0; i < transactionsFromBlockchain.length / 2; i++) {
+            var fields = transactionsFromBlockchain[2 * i].split(" ")
+            transactions[i] = {
+                hash: fields[0],
+                sender: fields[1],
+                receiver: fields[2],
+                value: fields[3],
+                dateTime: new Date(transactionsFromBlockchain[2 * i + 1]).toLocaleDateString()
+            }
+        }
+
+        m.redraw()
+    })
 }
 
 module.exports = {
+    oncreate: function() {
+        updateTransactions()
+    },
 	view: function () {
     	return m("div", [
     		m("h4", {class: "title"}, "Transactions"),
@@ -32,8 +38,8 @@ module.exports = {
                     m("th", "Value"),
                     m("th", "DateTime")
                 ])]),
-              m("tbody", [
-                getTransactions().map(function(transaction) {
+              m("tbody", {class: "transactions"}, [
+                transactions.map(function(transaction) {
                   return m("tr", [
                     m("td", transaction.hash),
                     m("td", transaction.sender),

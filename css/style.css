@@ -126,6 +126,10 @@ table {
     width: 100%;
 }
 
+tbody.transactions {
+    font-size: 5px;
+}
+
 ul {
 	list-style: none;
 	border: 2px solid #800080;
