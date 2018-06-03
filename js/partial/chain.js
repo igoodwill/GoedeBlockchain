@@ -55,11 +55,7 @@ var chain = {
         }.bind(this))
     },
     retrieveData:  function(key) {
-        console.log(this.client.getDataRecord(this.dataPath, key).then(function (result) {
-            console.log(result)
-            this.temp = result.data
-        }.bind(this)));       
-        return this.temp
+        return this.client.getDataRecord(this.dataPath, key)
     }
 }
 

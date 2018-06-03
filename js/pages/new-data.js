@@ -1,5 +1,5 @@
 const m = require('mithril')
-var SHA256 = require("crypto-js/sha256")
+const SHA256 = require("crypto-js/sha256")
 const chain = require('../partial/chain.js')
 
 var data = {
@@ -39,40 +39,40 @@ module.exports = {
             return
         }
 
-        var nameHash = SHA256(this.dataName)
-        console.log(nameHash)
-        var dataBlock = chain.retrieveData(nameHash);
-        console.log(dataBlock);
-        if(dataBlock !== null){
-            alert("The data with this data name already exists!")
-            return
-        }
-
-        chain.storeData(nameHash , data.data)
-
-        var nodeList = document.getElementsByName('dataTypeField')
-
-        for (var i = 0; i < nodeList.length; i++)
-            if (!nodeList[i].value) {
-                alert("Input all data fields, please!")
+        var nameHash = "testname"//SHA256(this.dataName)
+        chain.retrieveData(nameHash).then(function (result) {
+            console.log(result.data)
+            if(result.data !== null) {
+                alert("The data with this data name already exists!")
                 return
             }
 
-        var stringData = ""
+            var nodeList = document.getElementsByName('dataTypeField')
 
-        for (var i = 0; i < data.data.length - 1; i++)
-            stringData += global.dataTypesFieldsNames[this.selectedDataType][i] + ": " + data.data[i] + "\n"
-        stringData += global.dataTypesFieldsNames[this.selectedDataType][data.data.length - 1] + ": " + data.data[data.data.length - 1]
+            for (var i = 0; i < nodeList.length; i++)
+                if (!nodeList[i].value) {
+                    alert("Input all data fields, please!")
+                    return
+                }
 
-        global.filesystem.data.userData[global.filesystem.data.userData.length] = {
-            dataName: this.dataName,
-            dataType: this.selectedDataType,
-            data: stringData
-        }
+            var stringData = ""
 
-        global.filesystem.writeData()
+            for (var i = 0; i < data.data.length - 1; i++)
+                stringData += global.dataTypesFieldsNames[this.selectedDataType][i] + ": " + data.data[i] + "\n"
+            stringData += global.dataTypesFieldsNames[this.selectedDataType][data.data.length - 1] + ": " + data.data[data.data.length - 1]
 
-        m.route.set("/user-data")
+            global.filesystem.data.userData[global.filesystem.data.userData.length] = {
+                dataName: this.dataName,
+                dataType: this.selectedDataType,
+                data: stringData
+            }
+
+            global.filesystem.writeData()
+
+            chain.storeData(nameHash, SHA256(stringData))
+
+            m.route.set("/user-data")
+        }.bind(this))
     },
     cancel: function() {
         m.route.set("/user-data")
