@@ -2,12 +2,18 @@ const m = require('mithril')
 const SHA256 = require("crypto-js/sha256")
 const p2p = require('../partial/p2p.js')
 
+var dataToShow = []
+
 function search(dataTypeId, value, minAttestationsNumber) {
     var allData = global.filesystem.data.userData
 
-    return Promise.all(allData.map(function (val) {
+    Promise.all(allData.map(function (val) {
         return global.chain.retrieveData(SHA256(val.dataName).toString(), global.chain.address).then(function (result) {
-            val.attestationsNumber = parseInt(result.data.split("\n")[1])
+            if (result.data)
+                val.attestationsNumber = parseInt(result.data.split("\n")[1])
+            else
+                val.attestationsNumber = 0
+
             return val
         })
     })).then(function (all) {
@@ -15,13 +21,15 @@ function search(dataTypeId, value, minAttestationsNumber) {
             return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
             && (val.attestationsNumber >= minAttestationsNumber)
         })
+    }).then(function (result) {
+        dataToShow = result
+        m.redraw()
     })
 }
 
 const dataTypes = global.dataTypes
 
 module.exports = {
-    dataToShow: [],
     selectedData: 0,
     searchFor: "",
     minAttestationsNumber: 0,
@@ -35,13 +43,13 @@ module.exports = {
         this.minAttestationsNumber = min
     },
     search: function () {
-        search(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].dataType, this.searchFor, this.minAttestationsNumber).then(function (result) {
-            this.dataToShow = result
-            m.redraw()
-        }.bind(this))
+        search(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].dataType, this.searchFor, this.minAttestationsNumber)
+    },
+    oncreate: function() {
+        dataToShow = search(0, "", 0)
     },
     send: function() {  
-        if (!this.dataToShow[this.selectedData]) {
+        if (!dataToShow[this.selectedData]) {
             alert("Choose the data to send, please!")
             return
         }
@@ -52,9 +60,9 @@ module.exports = {
         var flag = true
         for (var i = 0; i < nodeList.length - 1; i++) {
             if (nodeList[i].checked) {
-                var id = this.dataToShow[this.selectedData].data.indexOf(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[i])
-                var id2 = this.dataToShow[this.selectedData].data.indexOf("\n", id)
-                stringData += this.dataToShow[this.selectedData].data.substring(id, id2 + 1);
+                var id = dataToShow[this.selectedData].data.indexOf(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[i])
+                var id2 = dataToShow[this.selectedData].data.indexOf("\n", id)
+                stringData += dataToShow[this.selectedData].data.substring(id, id2 + 1);
                 flag = false
             }
         }
@@ -64,19 +72,19 @@ module.exports = {
             return
         }
 
-        var id = this.dataToShow[this.selectedData].data.indexOf(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[nodeList.length - 1])
-        var id2 = this.dataToShow[this.selectedData].data.indexOf("\n", id)
+        var id = dataToShow[this.selectedData].data.indexOf(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[nodeList.length - 1])
+        var id2 = dataToShow[this.selectedData].data.indexOf("\n", id)
 
         if (id2 === -1)
-            stringData += this.dataToShow[this.selectedData].data.substring(id);
+            stringData += dataToShow[this.selectedData].data.substring(id);
         else
-            stringData += this.dataToShow[this.selectedData].data.substring(id, id2);
+            stringData += dataToShow[this.selectedData].data.substring(id, id2);
 
         p2p.sendData(global.peer, global.filesystem.data.requests[global.filesystem.data.requests.length - 1].requestedFrom, {
             isRequest: false,
             data: {
-                dataName: this.dataToShow[this.selectedData].dataName,
-                dataType: this.dataToShow[this.selectedData].dataType,
+                dataName: dataToShow[this.selectedData].dataName,
+                dataType: dataToShow[this.selectedData].dataType,
                 data: stringData
             }
         })
@@ -133,7 +141,7 @@ module.exports = {
                                 id: "data",
                                 class: "u-full-width",
                                 onchange: m.withAttr("selectedIndex", this.setDataToSend.bind(this)),
-                            }, this.dataToShow.map(function(val, id) {
+                            }, dataToShow.map(function(val, id) {
                                 return m(id === this.selectedData ? "option[selected]" : "option", {
                                     value: id
                                 }, val.dataName)

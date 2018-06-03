@@ -3,12 +3,18 @@ const SHA256 = require("crypto-js/sha256")
 
 const dataTypes = global.dataTypes
 
-function search(dataTypeId, value, minAttestationsNumber) {
-	var allData = global.filesystem.data.receivedData
+var dataToShow = []
 
-    return Promise.all(allData.map(function (val) {
-        return global.chain.retrieveData(SHA256(val.dataName).toString(), val.address).then(function (result) {
-            val.attestationsNumber = parseInt(result.data.split("\n")[1])
+function search(dataTypeId, value, minAttestationsNumber) {
+    var allData = global.filesystem.data.receivedData
+
+    Promise.all(allData.map(function (val) {
+        return global.chain.retrieveData(SHA256(val.dataName).toString(), global.chain.address).then(function (result) {
+            if (result.data)
+                val.attestationsNumber = parseInt(result.data.split("\n")[1])
+            else
+                val.attestationsNumber = 0
+
             return val
         })
     })).then(function (all) {
@@ -16,11 +22,13 @@ function search(dataTypeId, value, minAttestationsNumber) {
             return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
             && (val.attestationsNumber >= minAttestationsNumber)
         })
+    }).then(function (result) {
+        dataToShow = result
+        m.redraw()
     })
 }
 
 module.exports = {
-	dataToShow: [],
 	selectedDataType: 0,
 	searchFor: "",
     minAttestationsNumber: 0,
@@ -34,10 +42,10 @@ module.exports = {
         this.minAttestationsNumber = min
     },
 	search: function () {
-    	search(this.selectedDataType, this.searchFor, this.minAttestationsNumber).then(function (result) {
-            this.dataToShow = result
-            m.redraw()
-        }.bind(this))
+    	search(this.selectedDataType, this.searchFor, this.minAttestationsNumber)
+    },
+    oncreate: function() {
+        dataToShow = search(0, "", 0)
     },
 	view: function () {
     	return m("div", [
@@ -80,7 +88,7 @@ module.exports = {
                 ])
             ]),
 			m("ul", [
-                this.dataToShow.map(function(val, id) {
+                dataToShow.map(function(val, id) {
                     return m("li", {class: "spoiler"}, [
                             m("label", {
                                 class: "spoiler",

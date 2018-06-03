@@ -2,10 +2,12 @@ const m = require('mithril')
 const SHA256 = require("crypto-js/sha256")
 const p2p = require('../partial/p2p.js')
 
+var dataToShow = []
+
 function search(dataTypeId, value, minAttestationsNumber) {
     var allData = global.filesystem.data.userData
 
-    return Promise.all(allData.map(function (val) {
+    Promise.all(allData.map(function (val) {
         return global.chain.retrieveData(SHA256(val.dataName).toString(), global.chain.address).then(function (result) {
             val.attestationsNumber = parseInt(result.data.split("\n")[1])
             return val
@@ -15,13 +17,15 @@ function search(dataTypeId, value, minAttestationsNumber) {
             return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
             && (val.attestationsNumber >= minAttestationsNumber)
         })
+    }).then(function (result) {
+        dataToShow = result
+        m.redraw()
     })
 }
 
 const dataTypes = global.dataTypes
 
 module.exports = {
-    dataToShow: [],
     selectedDataType: 0,
     selectedData: 0,
     searchFor: "",
@@ -48,16 +52,16 @@ module.exports = {
         this.minAttestationsNumber = min
     },
     search: function () {
-        search(this.selectedDataType, this.searchFor, this.minAttestationsNumber).then(function (result) {
-            this.dataToShow = result
-            m.redraw()
-        }.bind(this))
+        search(this.selectedDataType, this.searchFor, this.minAttestationsNumber)
+    },
+    oncreate: function() {
+        dataToShow = search(0, "", 0)
     },
     setReceiverAddress: function (address) {
         this.receiverAddress = address
     },
     sendData: function () {
-        if (!this.dataToShow[this.selectedData]) {
+        if (!dataToShow[this.selectedData]) {
             alert("Choose the data to send, please!")
             return
         }
@@ -69,7 +73,7 @@ module.exports = {
 
         p2p.sendData(global.peer, this.receiverAddress, {
             isRequest: false,
-            data: this.dataToShow[this.selectedData]
+            data: dataToShow[this.selectedData]
         })
 
         m.route.set("/wallet")
@@ -127,7 +131,7 @@ module.exports = {
                         id: "data",
                         class: "u-full-width",
                         onchange: m.withAttr("selectedIndex", this.setDataToSend.bind(this)),
-                    }, this.dataToShow.map(function(val, id) {
+                    }, dataToShow.map(function(val, id) {
                         return m(id === this.selectedData ? "option[selected]" : "option", {
                             value: id
                         }, val.dataName)
