@@ -1,5 +1,38 @@
 const SHA256 = require("crypto-js/sha256")
 
+function onData(data, connection) {
+    if (data.key !== undefined) {
+        global.chain.retrieveData(data.key, global.chain.address).then(function (result) {
+            values = result.data.split("\n")
+            global.chain.storeData(data.key, values[0] + "\n" + (parseInt(values[1]) + 1))
+        })
+    } else if (data.isRequest) {
+        data.data.requestedFrom = connection.peer
+        global.filesystem.data.requests.push(data.data)
+    } else {
+        this.data = data.data
+        this.address = connection.peer
+        this.key = SHA256(this.data.dataName).toString()
+
+        global.chain.retrieveData(this.key, connection.peer).then(function (result) {
+            var recievedDataHash = SHA256(this.data.data).toString();
+
+            if (result.data.split("\n")[0] !== recievedDataHash) {
+                alert("Wrong data hash!")
+                return
+            }
+
+            this.data.address = this.address
+            global.filesystem.data.receivedData.push(this.data)
+            global.filesystem.writeData()
+
+            connection.send({
+                key: this.key
+            })
+        }.bind(this))
+    }
+}
+
 var p2p = {
     createPeer: function (id) {
         peer = new global.Peer(id, global.peerServer)
@@ -11,29 +44,16 @@ var p2p = {
         console.log("Waiting open.");
         connection.on('open', function () {
             connection.send(data)
+            connection.on('data', function (data) {
+                onData(data, connection)
+            })
             console.log('Send:', data)
         })
     },
     getData: function (connection) {
         connection.on('data', function (data) {
-            if (data.isRequest) {
-                data.data.requestedFrom = connection.peer
-                global.filesystem.data.requests.push(data.data)
-            }
-            else {
-                global.chain.retrieveData(SHA256(data.data.dataName).toString(), connection.peer).then(function (result) {
-                    var recievedDataHash = SHA256(this.data.data).toString();
-
-                    if (result.data !== recievedDataHash) {
-                        alert("Wrong data hash!")
-                        return
-                    }
-
-                    global.filesystem.data.receivedData.push(this.data)
-                    global.filesystem.writeData()
-                }.bind(data))
-            }
-        });
+            onData(data, connection)
+        })
     }
 }
 

@@ -1,12 +1,21 @@
 const m = require('mithril')
+const SHA256 = require("crypto-js/sha256")
 
 const dataTypes = global.dataTypes
 
-function search(dataTypeId, value) {
+function search(dataTypeId, value, minAttestationsNumber) {
 	var allData = global.filesystem.data.receivedData
 
-    return allData.filter(function (val) {
-        return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
+    return Promise.all(allData.map(function (val) {
+        return global.chain.retrieveData(SHA256(val.dataName).toString(), val.address).then(function (result) {
+            val.attestationsNumber = parseInt(result.data.split("\n")[1])
+            return val
+        })
+    })).then(function (all) {
+        return all.filter(function (val) {
+            return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
+            && (val.attestationsNumber >= minAttestationsNumber)
+        })
     })
 }
 
@@ -14,14 +23,21 @@ module.exports = {
 	dataToShow: [],
 	selectedDataType: 0,
 	searchFor: "",
+    minAttestationsNumber: 0,
 	setDataType: function (id) {
         this.selectedDataType = id
     },
 	setSearchFor: function (searchFor) {
 		this.searchFor = searchFor
 	},
+    setMinAttestationsNumber: function (min) {
+        this.minAttestationsNumber = min
+    },
 	search: function () {
-    	this.dataToShow = search(this.selectedDataType, this.searchFor)
+    	search(this.selectedDataType, this.searchFor, this.minAttestationsNumber).then(function (result) {
+            this.dataToShow = result
+            m.redraw()
+        }.bind(this))
     },
 	view: function () {
     	return m("div", [
@@ -41,7 +57,15 @@ module.exports = {
                     onclick: this.search.bind(this)
                 }, "Search")
             ]),
-            // TODO Attestation
+            m("div", {class: "row"}, [
+                m("input", {
+                    type: "number",
+                    name: "numberOfAttestations",
+                    placeholder: "How much attestations",
+                    oninput: m.withAttr("value", this.setMinAttestationsNumber.bind(this)),
+                    value: this.minAttestationsNumber
+                })
+            ]),
             m("div", {class: "row"}, [
                 m("div", {class: "six columns"}, [
                     m("select", {
@@ -67,7 +91,7 @@ module.exports = {
                                     id: id
                                 }),
                                 m("span", {class: "spoiler-icon"}),
-                                m("pre[class=\"spoiler-data\"]", val.data)
+                                m("pre[class=\"spoiler-data\"]", val.data + "\nNumber of attestations: " + val.attestationsNumber)
                             ], val.dataName)
                     ])
                 })

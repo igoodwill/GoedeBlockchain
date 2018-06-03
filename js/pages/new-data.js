@@ -67,7 +67,7 @@ module.exports = {
 
             global.filesystem.writeData()
 
-            global.chain.storeData(SHA256(this.dataName).toString(), SHA256(stringData).toString())
+            global.chain.storeData(SHA256(this.dataName).toString(), SHA256(stringData).toString() + "\n0")
 
             m.route.set("/user-data")
         }.bind(this))
