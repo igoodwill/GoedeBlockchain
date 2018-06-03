@@ -1,4 +1,3 @@
-const chain = require('../partial/chain.js')
 const SHA256 = require("crypto-js/sha256")
 
 var p2p = {
@@ -22,18 +21,18 @@ var p2p = {
                 global.filesystem.data.requests.push(data.data)
             }
             else {
-                var nameHash = SHA256(data.data.dataName)
-                var blockData = chain.retrieveData(nameHash)
-                var recievedDataHash = SHA256(data.data.data);
-                var blockDataHash = SHA256(blockData);
+                var nameHash = SHA256(data.data.dataName).toString()
+                global.chain.retrieveData(nameHash).then(function (result) {
+                    var recievedDataHash = SHA256(data.data.data).toString();
 
-                if (blockDataHash !== recievedDataHash) {
-                    alert("Wrong data hash!")
-                    return
-                }
+                    if (result.data !== recievedDataHash) {
+                        alert("Wrong data hash!")
+                        return
+                    }
 
-                global.filesystem.data.receivedData.push(data.data)
-                global.filesystem.writeData()
+                    global.filesystem.data.receivedData.push(data.data)
+                    global.filesystem.writeData()
+                })
             }
         });
     }

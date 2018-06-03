@@ -50,8 +50,6 @@ var chain = {
             .addSigningKey(this.signer)
             .addRecord(dataRecord.key, newValue, dataRecord.version)
             .submit()
-        }.bind(this)).then(function(result) {
-            alert(result)
         }.bind(this))
     },
     retrieveData:  function(key) {

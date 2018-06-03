@@ -1,6 +1,5 @@
 const m = require('mithril')
 const SHA256 = require("crypto-js/sha256")
-const chain = require('../partial/chain.js')
 
 var data = {
     data: [],
@@ -39,21 +38,20 @@ module.exports = {
             return
         }
 
-        var nameHash = "testname"//SHA256(this.dataName)
-        chain.retrieveData(nameHash).then(function (result) {
+        var nodeList = document.getElementsByName('dataTypeField')
+
+        for (var i = 0; i < nodeList.length; i++)
+            if (!nodeList[i].value) {
+                alert("Input all data fields, please!")
+                return
+            }
+
+        global.chain.retrieveData(SHA256(this.dataName).toString()).then(function (result) {
             console.log(result.data)
             if(result.data !== null) {
                 alert("The data with this data name already exists!")
                 return
             }
-
-            var nodeList = document.getElementsByName('dataTypeField')
-
-            for (var i = 0; i < nodeList.length; i++)
-                if (!nodeList[i].value) {
-                    alert("Input all data fields, please!")
-                    return
-                }
 
             var stringData = ""
 
@@ -69,7 +67,7 @@ module.exports = {
 
             global.filesystem.writeData()
 
-            chain.storeData(nameHash, SHA256(stringData))
+            global.chain.storeData(SHA256(this.dataName).toString(), SHA256(stringData).toString())
 
             m.route.set("/user-data")
         }.bind(this))
