@@ -55,6 +55,8 @@ module.exports = {
             global.peer = p2p.createPeer(global.chain.address);
             global.peer.on('connection', p2p.getData);
 
+            alert("\"" + global.chain.address + "\" is now your account folder! You are always asked to choose this folder, when you are signing in.")
+
             m.route.set("/wallet")
         } else {
             alert(message)
