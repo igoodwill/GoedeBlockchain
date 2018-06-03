@@ -21,18 +21,17 @@ var p2p = {
                 global.filesystem.data.requests.push(data.data)
             }
             else {
-                var nameHash = SHA256(data.data.dataName).toString()
-                global.chain.retrieveData(nameHash).then(function (result) {
-                    var recievedDataHash = SHA256(data.data.data).toString();
+                global.chain.retrieveData(SHA256(data.data.dataName).toString(), connection.peer).then(function (result) {
+                    var recievedDataHash = SHA256(this.data.data).toString();
 
                     if (result.data !== recievedDataHash) {
                         alert("Wrong data hash!")
                         return
                     }
 
-                    global.filesystem.data.receivedData.push(data.data)
+                    global.filesystem.data.receivedData.push(this.data)
                     global.filesystem.writeData()
-                })
+                }.bind(data))
             }
         });
     }

@@ -33,9 +33,9 @@ var chain = {
         this.address = this.derivedKey.privateKey.toAddress();
         this.pubAddress = this.derivedKey.publicKey.toAddress();
         // Calculate the accounts corresponding to the private key
-        this.dataPath = "/asset/p2pkh/" + this.getAssetKey(0).privateKey.toAddress() + "/metadata/";
+        this.dataPath = "/asset/p2pkh/" + this.pubAddress + "/metadata/";
 
-        this.signer = new openchain.MutationSigner(this.getAssetKey(0));
+        this.signer = new openchain.MutationSigner(this.derivedKey);
     },
     getAssetKey: function(index) {
         return this.baseKey.derive(44, true).derive(64, true).derive(1, true).derive(0).derive(index);
@@ -52,8 +52,9 @@ var chain = {
             .submit()
         }.bind(this))
     },
-    retrieveData:  function(key) {
-        return this.client.getDataRecord(this.dataPath, key)
+    retrieveData:  function(key, address) {
+        var path = "/asset/p2pkh/" + address + "/metadata/";
+        return this.client.getDataRecord(path, key)
     }
 }
 

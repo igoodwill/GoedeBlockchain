@@ -46,7 +46,7 @@ module.exports = {
                 return
             }
 
-        global.chain.retrieveData(SHA256(this.dataName).toString()).then(function (result) {
+        global.chain.retrieveData(SHA256(this.dataName).toString(), global.chain.pubAddress).then(function (result) {
             console.log(result.data)
             if(result.data !== null) {
                 alert("The data with this data name already exists!")
