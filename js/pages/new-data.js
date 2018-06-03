@@ -1,4 +1,6 @@
 const m = require('mithril')
+var SHA256 = require("crypto-js/sha256")
+const chain = require('../partial/chain.js')
 
 var data = {
     data: [],
@@ -36,6 +38,17 @@ module.exports = {
             alert("Input data name, please!")
             return
         }
+
+        var nameHash = SHA256(this.dataName)
+        console.log(nameHash)
+        var dataBlock = chain.retrieveData(nameHash);
+        console.log(dataBlock);
+        if(dataBlock !== null){
+            alert("The data with this data name already exists!")
+            return
+        }
+
+        chain.storeData(nameHash , data.data)
 
         var nodeList = document.getElementsByName('dataTypeField')
 

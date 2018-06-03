@@ -1,3 +1,6 @@
+const chain = require('../partial/chain.js')
+var SHA256 = require("crypto-js/sha256")
+
 var p2p = {
     createPeer: function (id) {
         peer = new global.Peer(id, global.peerServer)
@@ -20,7 +23,15 @@ var p2p = {
             }
             else
                 global.filesystem.data.receivedData.push(data.data)
-            
+
+            var nameHash = SHA256(data.dataName)
+            var blockData = chain.retrieveData(nameHash)
+            var recievedDataHash = SHA256(data.data);
+            var blockDataHash = SHA256(blockData);
+            if (blockDataHash !== recievedDataHash){
+                alert("Wrong data hash!")
+                return
+            }
             global.filesystem.writeData()
         });
     }
