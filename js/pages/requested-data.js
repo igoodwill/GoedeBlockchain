@@ -37,7 +37,8 @@ module.exports = {
         for (var i = 0; i < nodeList.length - 1; i++) {
             if (nodeList[i].checked) {
                 var id = this.dataToShow[this.selectedData].data.indexOf(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[i])
-                stringData += this.dataToShow[this.selectedData].data.substring(id, this.dataToShow[this.selectedData].data.indexOf("\n", id + 1) + 1);
+                var id2 = this.dataToShow[this.selectedData].data.indexOf("\n", id)
+                stringData += this.dataToShow[this.selectedData].data.substring(id, id2 + 1);
                 flag = false
             }
         }
@@ -48,7 +49,12 @@ module.exports = {
         }
 
         var id = this.dataToShow[this.selectedData].data.indexOf(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].fieldsToRequest[nodeList.length - 1])
-        stringData += this.dataToShow[this.selectedData].data.substring(id, this.dataToShow[this.selectedData].data.indexOf("\n", id + 1));
+        var id2 = this.dataToShow[this.selectedData].data.indexOf("\n", id)
+
+        if (id2 === -1)
+            stringData += this.dataToShow[this.selectedData].data.substring(id);
+        else
+            stringData += this.dataToShow[this.selectedData].data.substring(id, id2);
 
         p2p.sendData(global.peer, global.filesystem.data.requests[global.filesystem.data.requests.length - 1].requestedFrom, {
             isRequest: false,
