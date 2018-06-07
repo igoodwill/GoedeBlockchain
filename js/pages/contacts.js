@@ -35,6 +35,11 @@ module.exports = {
         this.newContactAddress = address
     },
     addContact: function() {
+        if (!this.newContactAddress) {
+            alert("Input new contact's address, please!")
+            return
+        }
+
         global.filesystem.data.contacts[global.filesystem.data.contacts.length] = this.newContactAddress
         global.filesystem.writeData()
 

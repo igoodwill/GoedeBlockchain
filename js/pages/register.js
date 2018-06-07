@@ -33,7 +33,7 @@ module.exports = {
         }
 
         if (!global.usernameRegex.test(this.username)) {
-            alert("Wrong e-mail format!")
+            alert("Wrong username format!")
             return
         }
 

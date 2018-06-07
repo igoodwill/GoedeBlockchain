@@ -156,8 +156,10 @@ var filesystem = {
         global.chain.loadKeyFromSeed(this.seed)
         this.folderPath += "/" + global.chain.address
 
-        if (!fs.existsSync(this.folderPath))
-            fs.mkdirSync(this.folderPath)
+        if (fs.existsSync(this.folderPath))
+            return "An account folder with the user, who has the same e-mail and password, already exists!"
+
+        fs.mkdirSync(this.folderPath)
 
         this.setData(this.defaultData)
         this.data.email = email

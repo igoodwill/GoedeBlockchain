@@ -45,7 +45,7 @@ module.exports = {
     	search(this.selectedDataType, this.searchFor, this.minAttestationsNumber)
     },
     oncreate: function() {
-        dataToShow = search(0, "", 0)
+        search(0, "", 0)
     },
     newData: function () {
         m.route.set("/new-data")

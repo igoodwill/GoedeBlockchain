@@ -46,7 +46,12 @@ module.exports = {
         search(global.filesystem.data.requests[global.filesystem.data.requests.length - 1].dataType, this.searchFor, this.minAttestationsNumber)
     },
     oncreate: function() {
-        dataToShow = search(0, "", 0)
+        if (global.filesystem.data.requests.length === 0) {
+            alert("There is no more data requests...")
+            m.route.set("/contacts")
+        }
+
+        search(0, "", 0)
     },
     send: function() {  
         if (!dataToShow[this.selectedData]) {
@@ -177,8 +182,7 @@ module.exports = {
             ])
         } catch (err) {
             if (err.message.indexOf("requestedFrom") !== -1) {
-                alert("There is no more data requests...")
-                m.route.set("/contacts")
+                
             }
         }
     }
