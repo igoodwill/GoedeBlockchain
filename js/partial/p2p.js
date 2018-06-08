@@ -7,27 +7,22 @@ function onData(data, connection) {
             global.chain.storeData(data.key, values[0] + "\n" + (parseInt(values[1]) + 1))
         })
 
-        global.chain.retrieveData("transactions", global.chain.address).then(function (result) {
-            if (result.data)
-                global.chain.storeData("transactions", result.data +
-                    "\n" + SHA256(global.chain.address.toString() + connection.peer + /* Value */ 10 + new Date().toString()).toString() + " " +
-                    global.chain.address.toString() + " " + connection.peer + " " + /* Value */ 10 + 
-                    "\n" + new Date().toString())
+        global.chain.retrieveData("transactions", global.chain.address).then(function (res) {
+            if (res.data)
+                global.chain.storeData("transactions", res.data + "\n" + data.transaction)
             else
-                global.chain.storeData("transactions",
-                    SHA256(global.chain.address.toString() + connection.peer + /* Value */ 10 + new Date().toString()).toString() + " " +
-                    global.chain.address.toString() + " " + connection.peer + " " + /* Value */ 10 + 
-                    "\n" + new Date().toString())
+                global.chain.storeData("transactions", data.transaction)
         })
     } else if (data.isRequest) {
         data.data.requestedFrom = connection.peer
         global.filesystem.data.requests.push(data.data)
+        console.log(data)
     } else {
         this.data = data.data
         this.address = connection.peer
         this.key = SHA256(this.data.dataName).toString()
 
-        global.chain.retrieveData(this.key, connection.peer).then(function (result) {
+        global.chain.retrieveData(this.key, this.address).then(function (result) {
             var recievedDataHash = SHA256(this.data.data).toString();
 
             if (result.data.split("\n")[0] !== recievedDataHash) {
@@ -39,24 +34,22 @@ function onData(data, connection) {
             global.filesystem.data.receivedData.push(this.data)
             global.filesystem.writeData()
 
+            var transaction = SHA256(this.address + global.chain.address.toString() + /* Value */ 10 + new Date().toString()).toString() + " " +
+                        this.address + " " + global.chain.address.toString() + " " + /* Value */ 10 + 
+                        "\n" + new Date().toString()
+
             connection.send({
-                key: this.key
+                key: this.key,
+                transaction: transaction
+            })
+
+            global.chain.retrieveData("transactions", global.chain.address).then(function (res) {
+                if (res.data)
+                    global.chain.storeData("transactions", res.data + "\n" + transaction)
+                else
+                    global.chain.storeData("transactions", transaction)
             })
         }.bind(this))
-
-
-        global.chain.retrieveData("transactions", global.chain.address).then(function (result) {
-            if (result.data)
-                    global.chain.storeData("transactions", result.data +
-                        "\n" + SHA256(connection.peer + global.chain.address.toString() + /* Value */ 10 + new Date().toString()).toString() + " " +
-                        connection.peer + " " + global.chain.address.toString() + " " + /* Value */ 10 + 
-                        "\n" + new Date().toString())
-            else
-                global.chain.storeData("transactions",
-                    SHA256(connection.peer + global.chain.address.toString() + /* Value */ 10 + new Date().toString()).toString() + " " +
-                    connection.peer + " " + global.chain.address.toString() + " " + /* Value */ 10 + 
-                    "\n" + new Date().toString())
-        })
     }
 }
 

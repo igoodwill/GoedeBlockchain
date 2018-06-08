@@ -9,7 +9,7 @@ function search(dataTypeId, value, minAttestationsNumber) {
     var allData = global.filesystem.data.receivedData
 
     Promise.all(allData.map(function (val) {
-        return global.chain.retrieveData(SHA256(val.dataName).toString(), global.chain.address).then(function (result) {
+        return global.chain.retrieveData(SHA256(val.dataName).toString(), val.address).then(function (result) {
             if (result.data)
                 val.attestationsNumber = parseInt(result.data.split("\n")[1])
             else

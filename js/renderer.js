@@ -34,7 +34,7 @@ const ReceivedDataComponent = require('./pages/received-data.js')
 const SendDataComponent = require('./pages/send-data.js')
 const ContactsComponent = require('./pages/contacts.js')
 const SendRequestComponent = require('./pages/send-request.js')
-const RequestedDataComponent = require('./pages/requested-data.js')
+const RequestedAttestationComponent = require('./pages/requested-attestation.js')
 const TransactionsComponent = require('./pages/transactions.js')
 const ViewTwoFactorComponent = require('./pages/view-two-factor')
 
@@ -50,7 +50,7 @@ m.route(root, "/login", {
     "/send-data": SendDataComponent,
     "/contacts": ContactsComponent,
     "/send-request": SendRequestComponent,
-    "/requested-data": RequestedDataComponent,
+    "/requested-attestation": RequestedAttestationComponent,
     "/transactions": TransactionsComponent,
     "/view-two-factor": ViewTwoFactorComponent
 })

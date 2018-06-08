@@ -1,14 +1,39 @@
 const m = require('mithril')
+const SHA256 = require("crypto-js/sha256")
 const p2p = require('../partial/p2p.js')
+
+var dataToShow = []
 
 function getContacts() {
     return global.filesystem.data.contacts;
+}
+
+function search(dataTypeId, value, minAttestationsNumber) {
+    var allData = global.filesystem.data.userData
+
+    Promise.all(allData.map(function (val) {
+        return global.chain.retrieveData(SHA256(val.dataName).toString(), global.chain.address).then(function (result) {
+            val.attestationsNumber = parseInt(result.data.split("\n")[1])
+            return val
+        })
+    })).then(function (all) {
+        return all.filter(function (val) {
+            return (dataTypeId === val.dataType) && (val.dataName.toLowerCase().indexOf(value.toLowerCase()) !== -1)
+            && (val.attestationsNumber >= minAttestationsNumber)
+        })
+    }).then(function (result) {
+        dataToShow = result
+        m.redraw()
+    })
 }
 
 const dataTypes = global.dataTypes
 
 module.exports = {
     selectedDataType: 0,
+    selectedData: 0,
+    searchFor: "",
+    minAttestationsNumber: 0,
     setDataType: function (id) {
         if (id === this.selectedDataType)
             return
@@ -20,34 +45,35 @@ module.exports = {
         for (var i = 0; i < nodeList.length; i++)
             nodeList[i].checked = false
     },
+    setDataToAttest: function (id) {
+        this.selectedData = id
+    },
+    setSearchFor: function (searchFor) {
+        this.searchFor = searchFor
+    },
+    setMinAttestationsNumber: function (min) {
+        this.minAttestationsNumber = min
+    },
+    search: function () {
+        search(this.selectedDataType, this.searchFor, this.minAttestationsNumber)
+    },
+    oncreate: function() {
+        search(0, "", 0)
+    },
     sendRequest: function() {
-        var checkedFields = []
-        var nodeList = document.getElementsByName('fieldToRequest')
-
-        var flag = true
-        for (var i = 0; i < nodeList.length; i++) {
-            if (nodeList[i].checked) {
-                checkedFields.push(global.dataTypesFieldsNames[this.selectedDataType][i])
-                flag = false
-            }
-        }
-
-        if (flag) {
-            alert("Choose at least one field to request, please!")
+        if (!dataToShow[this.selectedData]) {
+            alert("Choose the data to send, please!")
             return
         }
 
-        nodeList = document.getElementsByName('contact')
+        var nodeList = document.getElementsByName('contact')
         var contactNames = getContacts()
 
         for (var i = 0; i < nodeList.length; i++)
             if (nodeList[i].checked)
                 p2p.sendData(global.peer, contactNames[i], {
                     isRequest: true,
-                    data: {
-                        dataType: this.selectedDataType,
-                        fieldsToRequest: checkedFields
-                    }
+                    data: dataToShow[this.selectedData]
                 })
 
         m.route.set("/contacts")
@@ -57,7 +83,7 @@ module.exports = {
     },
     view: function () {
         return m("div", [
-            m("h4", {class: "centered-text"}, "Data request"),
+            m("h4", {class: "centered-text"}, "Attestation request"),
             m("div[class=\"center\"]", [
                 m("label", "Select contact(s)"),
                 m("ul", [
@@ -77,7 +103,31 @@ module.exports = {
                         ])
                     })
                 ]),
-                m("label", "Select data type"),
+                m("div", {class: "row"}, [
+                    m("input", {
+                        class: "six columns",
+                        type: "search",
+                        placeholder: "Search",
+                        name: "search",
+                        oninput: m.withAttr("value", this.setSearchFor.bind(this)),
+                        value: this.searchFor
+                    }),
+                    m("button", {
+                        class: "small-btn",
+                        style: "margin-left: 50px;",
+                        onclick: this.search.bind(this)
+                    }, "Search")
+                ]),
+                m("div", {class: "row"}, [
+                    m("input", {
+                        class: "six columns",
+                        type: "number",
+                        name: "numberOfAttestations",
+                        placeholder: "How much attestations",
+                        oninput: m.withAttr("value", this.setMinAttestationsNumber.bind(this)),
+                        value: this.minAttestationsNumber
+                    })
+                ]),
                 m("div", {class: "row"}, [
                     m("div", {class: "six columns"}, [
                         m("select", {
@@ -85,29 +135,31 @@ module.exports = {
                             class: "u-full-width",
                             onchange: m.withAttr("selectedIndex", this.setDataType.bind(this)),
                         }, dataTypes.map(function(val, id) {
-                            return m("option", {
+                            return m(id === this.selectedDataType ? "option[selected]" : "option", {
                                 value: id
                             }, val)
                         }))
                     ])
                 ]),
-                global.dataTypesFieldsNames[this.selectedDataType].map(function (value) {
-                    return [
-                        m("label", {class: "custom-checkbox"}, [
-                            m("input", {
-                                type: "checkbox",
-                                name: "fieldToRequest",
-                                style: "float: left;"
-                            }),
-                            m("span", {class: "custom-checkmark"})
-                        ], value),
-                    ]
-                }),
+                m("label", "Data to attest:"),
+                m("div", {class: "row"}, [
+                    m("div", {class: "six columns"}, [
+                        m("select", {
+                            id: "data",
+                            class: "u-full-width",
+                            onchange: m.withAttr("selectedIndex", this.setDataToAttest.bind(this)),
+                        }, dataToShow.map(function(val, id) {
+                            return m(id === this.selectedData ? "option[selected]" : "option", {
+                                value: id
+                            }, val.dataName)
+                        }))
+                    ])
+                ]),
                 m("div", {class: "row"}, [
                     m("button", {
                         style: "margin-right: 10px;",
                         onclick: this.sendRequest.bind(this)
-                    }, "Send"),
+                    }, "Attest"),
                     m("button", {
                         onclick: this.cancel.bind(this)
                     }, "Cancel")

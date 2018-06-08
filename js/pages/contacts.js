@@ -28,8 +28,8 @@ module.exports = {
 	sendRequest: function() {
 		m.route.set("/send-request")
 	},
-    requestedData: function() {
-        m.route.set("/requested-data")
+    requestedAttestation: function() {
+        m.route.set("/requested-attestation")
     },
     setNewContactAddress: function(address) {
         this.newContactAddress = address
@@ -75,8 +75,8 @@ module.exports = {
                 m("button", {
                     class: "small-btn",
                     style: "margin-left: 5px;float:right;",
-                    onclick: this.requestedData.bind(this),
-                }, "Requested data")
+                    onclick: this.requestedAttestation.bind(this),
+                }, "Requests")
             ]),
             m("input", {
                 type: "text",
