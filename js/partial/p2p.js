@@ -14,9 +14,18 @@ function onData(data, connection) {
                 global.chain.storeData("transactions", data.transaction)
         })
     } else if (data.isRequest) {
-        data.data.requestedFrom = connection.peer
-        global.filesystem.data.requests.push(data.data)
-        console.log(data)
+        global.chain.retrieveData(SHA256(data.data.dataName).toString(), connection.peer).then(function (result) {
+            var recievedDataHash = SHA256(data.data.data).toString();
+
+            if (result.data.split("\n")[0] !== recievedDataHash) {
+                alert("Wrong data hash!")
+                return
+            }
+
+            data.data.requestedFrom = connection.peer
+            global.filesystem.data.requests.push(data.data)
+            global.filesystem.writeData()
+        })
     } else {
         this.data = data.data
         this.address = connection.peer
